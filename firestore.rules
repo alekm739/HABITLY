@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+      match /days/{day} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+    match /nicks/{nick} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if request.auth != null
+        && nick.matches('^[a-z0-9_.]{3,20}$')
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email;
+      allow update, delete: if false;
+    }
+  }
+}

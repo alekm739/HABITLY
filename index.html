@@ -480,7 +480,99 @@ input[type=time].inp{padding:0 10px}
 .myv a{flex:1;min-width:0;color:inherit;font-weight:700;font-size:14px;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*,.av *{animation:none!important;transition:none!important}.ov-new,.fade1,.fade2,.fade3,.prize{opacity:1}.ov-old,.ov-flash,.rays{display:none}}
 @media (max-width:380px){.parity .big{font-size:26px}.tile b{font-size:18px}.node .ball{width:54px;height:54px;font-size:23px}}
+/* ---- Acceso (login, registro, bienvenida) ---- */
+html.authing .top,html.authing #view,html.authing .nav,html.authing .fab{display:none!important}
+.syncdot{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:15px;text-decoration:none;color:var(--muted)}
+.syncdot.busy span{display:inline-block;animation:spin 1s linear infinite}
+.acct{display:flex;align-items:center;gap:12px}
+.acct .pic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:800 19px var(--display);background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent);flex:none}
+.acct b{display:block;font-size:15.5px}
+.acct small{color:var(--muted);font-size:13px;word-break:break-all}
+#auth{--ok:#12A57A;position:fixed;inset:0;z-index:25;overflow-y:auto;-webkit-overflow-scrolling:touch}
+body[data-mode="noche"] #auth{--ok:#3DDC97}
+#auth .awrap{max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-block:calc(18px + env(safe-area-inset-top,0px)) calc(28px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#auth .abrand{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;font:800 22px var(--display);letter-spacing:-.02em}
+#auth .abrand svg{width:26px;height:26px}
+#auth .ahero{position:relative;width:min(200px,52vw);margin:4px auto -26px;z-index:1;cursor:pointer}
+#auth .ahero svg{width:100%;height:auto;display:block;overflow:visible}
+#auth .abubble{position:absolute;right:-34%;top:12%;max-width:150px;background:var(--fg);color:var(--bg);font-weight:700;font-size:12.5px;line-height:1.3;padding:7px 10px;border-radius:14px 14px 14px 4px;animation:apop .35s ease}
+@keyframes apop{from{opacity:0;transform:translateY(6px) scale(.95)}}
+#auth .av #aeyes{transition:transform .18s ease-out}
+#auth .av .alid{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
+#auth .av .ahand{transform-box:fill-box;transform-origin:center;opacity:0;transform:translate(0px,0px) scale(.3);transition:transform .4s cubic-bezier(.3,1.4,.5,1),opacity .25s ease}
+#auth .acard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:0 18px 50px rgba(25,45,100,.13);padding:22px 18px 18px;display:flex;flex-direction:column;gap:14px}
+body[data-mode="noche"] #auth .acard{background:#121A31;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+#auth .acard.shake{animation:ashake .45s ease}
+@keyframes ashake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+#auth .afade{animation:fadeup .35s ease}
+#auth .atabs{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:14px;padding:4px;gap:4px}
+#auth .atabs button{min-height:40px;border-radius:10px;font-weight:800;font-size:14.5px;color:var(--muted)}
+#auth .atabs button[aria-selected="true"]{background:var(--card);color:var(--fg);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+body[data-mode="noche"] #auth .atabs button[aria-selected="true"]{background:#1C2747}
+#auth h1{font:800 23px/1.2 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+#auth .lead{margin:-6px 0 0;color:var(--muted);font-size:14px}
+#auth form{display:flex;flex-direction:column;gap:13px}
+#auth .afield{display:flex;flex-direction:column;gap:6px}
+#auth .afield>label{font:700 11.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+#auth .inwrap{position:relative;display:flex;align-items:center}
+#auth .inwrap .ico{position:absolute;left:14px;font-size:17px;pointer-events:none;opacity:.7}
+#auth .ainp{width:100%;min-height:52px;background:var(--soft);border:1.5px solid var(--line);border-radius:16px;padding:0 46px 0 44px;font-size:16px;font-weight:600;color:var(--fg);transition:border-color .2s,background .2s}
+#auth .ainp:focus{outline:none;border-color:var(--accent);background:color-mix(in srgb,var(--accent) 5%,var(--card))}
+#auth .ainp.bad{border-color:var(--danger)}
+#auth .ainp.good{border-color:var(--ok)}
+#auth .aeye{position:absolute;right:6px;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--muted)}
+#auth .aeye svg{width:20px;height:20px}
+#auth .astate{position:absolute;right:14px;font-weight:800;font-size:15px}
+#auth .ahint{font-size:12.5px;color:var(--muted);min-height:1em;margin:0}
+#auth .ahint.err{color:var(--danger);font-weight:700}
+#auth .ahint.ok{color:var(--ok);font-weight:700}
+#auth .meter{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+#auth .meter i{height:6px;border-radius:9px;background:var(--line);transition:background .25s}
+#auth .arow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+#auth .alink{color:var(--accent);font-weight:700;font-size:13.5px}
+#auth .alink.glow{animation:aglow 1s ease 2}
+@keyframes aglow{50%{text-shadow:0 0 12px color-mix(in srgb,var(--accent) 70%,transparent)}}
+#auth .acheck{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--muted)}
+#auth .acheck input{width:18px;height:18px;accent-color:var(--accent)}
+#auth .abtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:54px;border-radius:18px;font:800 16px var(--body);background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 35%,transparent);transition:transform .12s,opacity .2s}
+#auth .abtn:active{transform:scale(.98)}
+#auth .abtn[disabled]{opacity:.55;cursor:not-allowed}
+#auth .abtn.ghost{background:none;color:var(--muted);box-shadow:none;min-height:44px;font-size:14.5px}
+#auth .aspin{width:18px;height:18px;border-radius:50%;border:2.5px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite;flex:none}
+#auth .amsg{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;font-size:14px;font-weight:600}
+#auth .amsg.err{background:color-mix(in srgb,var(--danger) 10%,transparent);color:var(--danger)}
+#auth .amsg.ok{background:color-mix(in srgb,var(--ok) 11%,transparent);color:color-mix(in srgb,var(--ok) 80%,var(--fg))}
+#auth .aquote{text-align:center;margin:18px auto 0;max-width:34ch;color:var(--muted);font-size:13px}
+#auth .aquote b{display:block;font:600 15px/1.35 var(--display);color:var(--fg);margin-bottom:3px;text-wrap:balance}
+#auth .center{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center;padding:8px 0}
+#auth .steps{display:flex;gap:6px;justify-content:center}
+#auth .steps i{width:28px;height:6px;border-radius:9px;background:var(--line);transition:background .3s,width .3s}
+#auth .steps i.on{background:var(--accent);width:40px}
+#auth .apaths{display:flex;flex-direction:column;gap:10px}
+#auth .apath{--c:var(--accent);display:flex;align-items:center;gap:14px;padding:13px 14px;border-radius:18px;border:1.5px solid var(--line);text-align:left;background:var(--card);transition:border-color .2s,background .2s,transform .12s}
+body[data-mode="noche"] #auth .apath{background:#121A31}
+#auth .apath:active{transform:scale(.98)}
+#auth .apath .sym{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:23px;background:color-mix(in srgb,var(--c) 15%,transparent);flex:none}
+#auth .apath b{font:700 15.5px var(--display);display:block}
+#auth .apath small{color:var(--muted);font-size:12.5px}
+#auth .apath[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 9%,var(--card))}
+#auth .apath ul{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:4px}
+#auth .apath li{font-size:11.5px;font-weight:700;background:var(--soft);padding:2px 7px;border-radius:7px;color:var(--muted)}
+#auth .abirth{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;color:#ECF1FB;background:radial-gradient(60% 50% at 50% 42%,#281E5A,#04060F);
+  padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+#auth .abirth .stage{position:relative;width:min(64vw,250px);aspect-ratio:1;display:grid;place-items:center}
+#auth .abirth .stage>*{grid-area:1/1}
+#auth .abirth .seed{width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 0 30px 10px var(--accent);animation:aseed 1.6s ease-in forwards}
+@keyframes aseed{0%{transform:scale(.3)}60%{transform:scale(1.4)}85%{transform:scale(.8)}100%{transform:scale(5);opacity:0}}
+#auth .abirth .rays{animation:raysin .8s ease-out 1.5s forwards,spin 18s linear 1.5s infinite}
+#auth .abirth .born{opacity:0;width:100%;animation:born .9s cubic-bezier(.2,1.3,.4,1) 1.55s forwards}
+#auth .abirth .ov-flash{animation:flash .7s ease-in-out 1.3s both}
+#auth .abirth h2{font:800 clamp(26px,7vw,34px) var(--display);margin:0;opacity:0;animation:fadeup .6s ease-out 2.1s forwards;text-wrap:balance;color:#ECF1FB;text-transform:none;letter-spacing:-.02em}
+#auth .abirth p{margin:0;color:#FFC94D;font-weight:700;opacity:0;animation:fadeup .6s ease-out 2.4s forwards}
+#auth .abirth .go{width:min(100%,320px);opacity:0;animation:fadeup .6s ease-out 2.7s forwards}
+@media (prefers-reduced-motion:reduce){#auth .abirth h2,#auth .abirth p,#auth .abirth .go,#auth .abirth .born{opacity:1}#auth .abirth .seed{display:none}}
 </style>
+<script>if(/(^|\.)github\.io$/.test(location.hostname)||window.__FB_FORCE===true)document.documentElement.classList.add('authing')</script>
 
 <div class="sky" aria-hidden="true"></div>
 <div class="stars" id="stars" aria-hidden="true"></div>
@@ -492,6 +584,7 @@ input[type=time].inp{padding:0 10px}
   <div class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 16a2 2 0 0 1 2 2a4 4 0 0 1-4 4a6 6 0 0 1-6-6a8 8 0 0 1 8-8a10 10 0 0 1 10 10a12 12 0 0 1-12 12" fill="none" style="stroke:var(--accent)" stroke-width="3.2" stroke-linecap="round"/></svg>Habitly</div>
   <a class="lvpill num" id="lvPill" href="#logros">Nv 1</a>
   <button class="install" id="installBtn" hidden>Instalar</button>
+  <a class="syncdot" id="syncDot" href="#ajustes" hidden></a>
   <a class="gear" href="#ajustes" aria-label="Ajustes, apariencia y respaldo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>
 </div></header>
 
@@ -513,11 +606,19 @@ input[type=time].inp{padding:0 10px}
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <input type="file" id="impFile" accept="application/json,.json" hidden>
 <input type="file" id="imgFile" accept="image/*" hidden>
+<div id="auth" hidden></div>
 
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-app-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-auth-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-firestore-compat.js"></script>
 <script>
 (()=>{
 'use strict';
 const KEY='habitly.v2',OLDKEY='habitly.v1',IMGKEY='habitly.bg';
+const FB_CONFIG={apiKey:"AIzaSyB-cqqDdmhmgypBDJb09t75tZVrfVMtiao",authDomain:"habitly-e3df9.firebaseapp.com",projectId:"habitly-e3df9",storageBucket:"habitly-e3df9.firebasestorage.app",messagingSenderId:"1061188771806",appId:"1:1061188771806:web:4adcf1dee48c3dff43074f"};
+const AUTH_MODE=/(^|\.)github\.io$/.test(location.hostname)||window.__FB_FORCE===true;
+const INVITE_CODE=null; // registro abierto. Para pedir código: const INVITE_CODE='HABITLY-2026';
+let APP_ON=!AUTH_MODE;
 const PATHS={
   inventor:{n:'Inventor',m:'Tesla',e:'⚡',v:'inv',d:'Aprender, crear, construir'},
   explorador:{n:'Explorador',m:'Musk',e:'🚀',v:'exp',d:'Trabajo, negocio, metas grandes'},
@@ -647,8 +748,10 @@ function load(){
   try{const o=JSON.parse(localStorage.getItem(OLDKEY));if(o&&Array.isArray(o.habits))return normalize({habits:o.habits,log:o.log})}catch(e){}
   return seed();
 }
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('No se pudo guardar: el almacenamiento está lleno')}}
-let S=load();
+const storeKey=()=>AUTH_MODE&&Cloud.uid?'habitly.u.'+Cloud.uid:KEY;
+function localSave(){if(AUTH_MODE&&!Cloud.uid)return;try{localStorage.setItem(storeKey(),JSON.stringify(S))}catch(e){toast('No se pudo guardar: el almacenamiento está lleno')}}
+function save(){localSave();if(AUTH_MODE&&APP_ON)Cloud.schedule()}
+let S=AUTH_MODE?templateState('cero'):load();
 let BG=null;try{BG=localStorage.getItem(IMGKEY)}catch(e){}
 
 /* ---------- apariencia ---------- */
@@ -660,6 +763,7 @@ function applyTheme(){
   const bi=document.getElementById('bgimg'),vl=document.getElementById('veilL');
   if(BG){bi.style.backgroundImage=`url("${BG}")`;bi.hidden=false;vl.hidden=false;vl.style.opacity=m.veil;b.classList.add('hasimg')}else{bi.hidden=true;vl.hidden=true;b.classList.remove('hasimg')}
   const tc=document.querySelector('meta[name="theme-color"]');if(tc)tc.content=MODES[m.mode].bg;
+  try{localStorage.setItem('habitly.look',JSON.stringify({mode:m.mode,accent:m.accent}))}catch(e){}
 }
 
 /* ---------- reglas ---------- */
@@ -701,7 +805,7 @@ function pathXP(days){const b={inventor:0,explorador:0,despierto:0};const from=d
 const xpFor=n=>50*(n-1)*n;
 function levelOf(xp){let n=1;while(xp>=xpFor(n+1))n++;return n}
 function stageOf(lv){let s=0;STAGES.forEach((st,i)=>{if(lv>=st.lv)s=i});return s}
-function profile(){const b=pathXP(14);const best=PK.reduce((a,k)=>b[k]>b[a]?k:a,'despierto');return b[best]>0?best:null}
+function profile(){const b=pathXP(14);const best=PK.reduce((a,k)=>b[k]>b[a]?k:a,'despierto');const tot=b.inventor+b.explorador+b.despierto;if(PATHS[S.meta.path]&&tot<150)return S.meta.path;return b[best]>0?best:null}
 function combined(s){const a=hStat(s),b=fStat(s);const t=a.t+b.t;return{t,d:a.d+b.d,p:t?(a.d+b.d)/t:0}}
 function earliest(){let e=today();S.habits.forEach(h=>{if(h.created<e)e=h.created});S.tasks.forEach(t=>{if(t.created<e)e=t.created});return e}
 function streak(){let s=today();if(combined(s).p<.8)s=add(s,-1);let n=0;const e=earliest();for(let i=0;i<500&&s>=e;i++){const c=combined(s);if(c.t===0){s=add(s,-1);continue}if(c.p<.8)break;n++;s=add(s,-1)}return n}
@@ -842,7 +946,7 @@ const ICON={
 function ring(p,color,size,sw,txt){const r=(size-sw)/2,c=2*Math.PI*r;return`<div class="ringw" style="width:${size}px;height:${size}px"><svg viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" style="stroke:${color};stroke-opacity:.16" stroke-width="${sw}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" style="stroke:${color};transition:stroke-dashoffset .6s ease" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-clamp(p,0,1))}"/></svg><b class="num" style="${size<50?'font-size:10.5px':''}">${txt}</b></div>`}
 function cntRing(h,v){const r=16,c=2*Math.PI*r,p=Math.min(1,v/goal(h));return`<span class="cnt"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="${r}" fill="none" stroke="${h.color}" stroke-opacity=".25" stroke-width="4"/><circle cx="20" cy="20" r="${r}" fill="none" style="stroke:${p>=1?'var(--accent)':h.color}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p)}"/></svg><b>${v}</b></span>`}
 
-let route='inicio',hoyDate=today(),fDate=today(),wkEnd=today(),pSeg='global',fFilter='todas',pendingImport=null,confirmWipe=false;
+let route='inicio',hoyDate=today(),fDate=today(),wkEnd=today(),pSeg='global',fFilter='todas',pendingImport=null,confirmWipe=false,confirmOut=false;
 const open={},closed={};
 const view=document.getElementById('view');
 
@@ -893,7 +997,7 @@ inicio(){
   const nextTask=S.sections.map(sec=>S.tasks.filter(x=>x.sec===sec.id&&applies(x,t)&&!fDone(x,t)&&!x.opt)).flat()[0];
   const nextHab=S.habits.filter(h=>sched(h,t)&&!isDone(h,t)).slice(0,2);
   return`<section class="panel hero" style="--pc:${prof?`var(--${prof.v})`:'var(--accent)'}">
-    <div class="hero-top"><div><div class="greet">${greet} 👋</div><div class="date">${fmtLong(t)}</div></div><span class="prof">${prof?prof.e+' '+prof.n:'✦ Equilibrio'}</span></div>
+    <div class="hero-top"><div><div class="greet">${greet}${S.meta.name?', '+esc(S.meta.name):''} 👋</div><div class="date">${fmtLong(t)}</div></div><span class="prof">${prof?prof.e+' '+prof.n:'✦ Equilibrio'}</span></div>
     <div class="orbwrap"><div class="say" id="say">${lines[md]}</div><button class="orb" data-act="pet" aria-label="Tocar a tu avatar">${avatar(I.st,I.prof,md,I.en,S.meta.aura)}</button></div>
     <div class="stagename">${STAGES[I.st].n}</div>
     <div class="stagesub">Nivel ${I.lv} · ${titleOf(I.lv)}${prof?` · Camino del ${prof.n}`:''}</div>
@@ -1019,7 +1123,13 @@ animo(){
 },
 ajustes(){
   const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone,np=('Notification' in window)?Notification.permission:'na',m=S.meta;
+  const me=(S.meta.name||Cloud.nick||'?').trim();
   return`<h1>Ajustes</h1>
+  ${AUTH_MODE?`<section class="panel stack"><h3>👤 Tu cuenta</h3><div class="acct"><span class="pic">${esc(me.charAt(0).toUpperCase())}</span><div style="min-width:0"><b>${esc(S.meta.name||'')} ${Cloud.nick?`<span class="sub" style="font-weight:600">@${esc(Cloud.nick)}</span>`:''}</b><small>${esc(Cloud.email||'')}</small></div></div>
+    <p class="sub" id="syncTxt" style="font-size:13.5px">${esc(Cloud.text())}</p>
+    <div class="row2"><button class="btn out" data-act="syncnow">Sincronizar ahora</button><button class="btn out" data-act="pwreset">Cambiar contraseña</button></div>
+    ${confirmOut?`<div class="confirm"><b>¿Cerrar sesión en este dispositivo?</b>${Cloud.pending&&!navigator.onLine?'<span class="warn">⚠️ Tienes cambios sin subir y no hay internet. Si cierras sesión ahora, se perderán.</span>':'<span class="sub">Tu progreso queda guardado en la nube.</span>'}<div class="row2"><button class="btn dng" data-act="logoutOk">Cerrar sesión</button><button class="btn ghost" data-act="logoutNo">Cancelar</button></div></div>`:'<button class="btn ghost" data-act="logout">Cerrar sesión</button>'}</section>`
+  :`<section class="panel stack"><h3>👤 Modo invitado</h3><p class="sub" style="font-size:13.5px">En esta vista previa tus datos solo viven en este navegador. En tu versión publicada entras con tu cuenta y todo se guarda en la nube.</p></section>`}
   <section class="panel stack"><h3>🎨 Apariencia</h3>
     <div class="modes">${Object.entries(MODES).map(([k,x])=>`<button class="mode${m.mode===k?' on':''}" data-act="mode" data-k="${k}"><span class="pv" style="display:block;background:linear-gradient(180deg,${x.sky},${x.bg})"><i style="top:14px;background:${k==='noche'?'rgba(255,255,255,.15)':'#fff'}"></i><i style="top:30px;right:30px;background:${x.a}"></i></span><b>${x.n}</b></button>`).join('')}</div>
     <div class="field"><span class="lbl">Color principal</span><div class="swatches">${ACCENTS.map(([n,c])=>`<button class="sw${m.accent.toLowerCase()===c.toLowerCase()?' on':''}" style="background:${c}" data-act="accent" data-k="${c}" aria-label="${n}"></button>`).join('')}<label class="sw" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer" aria-label="Color personalizado"><input type="color" id="accPick" value="${m.accent}" style="opacity:0;width:100%;height:100%;cursor:pointer"></label></div></div>
@@ -1131,8 +1241,8 @@ function finishFocus(natural){
 }
 
 /* ---------- render y acciones ---------- */
-function render(){applyTheme();view.innerHTML=R[route]();document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('on',a.dataset.r===route));document.getElementById('fab').hidden=!(route==='habitos'||route==='focus');if(route==='habitos')bindDrag();if(route==='ajustes')bindSettings();updateHeader()}
-function nav(){const h=location.hash.slice(1);route=R[h]?h:'inicio';if(route!=='animo')Q=null;if(route!=='ajustes'){pendingImport=null;confirmWipe=false}render();scrollTo(0,0)}
+function render(){if(!APP_ON)return;applyTheme();view.innerHTML=R[route]();document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('on',a.dataset.r===route));document.getElementById('fab').hidden=!(route==='habitos'||route==='focus');if(route==='habitos')bindDrag();if(route==='ajustes')bindSettings();updateHeader()}
+function nav(){if(!APP_ON)return;const h=location.hash.slice(1);route=R[h]?h:'inicio';if(route!=='animo')Q=null;if(route!=='ajustes'){pendingImport=null;confirmWipe=false;confirmOut=false}render();scrollTo(0,0)}
 function rectOf(el){const r=el.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
 function habitTap(btn){
   const h=S.habits.find(x=>x.id===btn.dataset.id);if(!h)return;const s=btn.dataset.date,pt=rectOf(btn.querySelector('.tick,.cnt')||btn);
@@ -1203,7 +1313,7 @@ document.addEventListener('click',e=>{
   else if(a==='impNo'){pendingImport=null;render()}
   else if(a==='wipe'){confirmWipe=true;render()}
   else if(a==='wipeNo'){confirmWipe=false;render()}
-  else if(a==='wipeOk'){const keep={mode:S.meta.mode,accent:S.meta.accent,veil:S.meta.veil};S={v:2,habits:[],log:{},moods:{},sections:seedFocus(today()).sections,tasks:[],flog:{},meta:Object.assign(freshMeta(),keep,{seen:true,my:[]})};save();confirmWipe=false;render();toast('Datos borrados')}
+  else if(a==='wipeOk'){const keep={mode:S.meta.mode,accent:S.meta.accent,veil:S.meta.veil};S={v:2,habits:[],log:{},moods:{},sections:seedFocus(today()).sections,tasks:[],flog:{},meta:Object.assign(freshMeta(),keep,{seen:true,my:[],name:S.meta.name,path:S.meta.path})};save();confirmWipe=false;render();toast('Datos borrados')}
   else if(a==='qstart'){Q={step:0,ans:[]};if(location.hash!=='#animo')location.hash='animo';else render();scrollTo(0,0);SFX.tap()}
   else if(a==='qback'){if(!Q)return;if(Q.step===0){Q=null}else Q.step--;render()}
   else if(a==='qans'){if(!Q)return;Q.ans[Q.step]=+b.dataset.i;b.classList.add('sel');SFX.tap();buzz(12);
@@ -1214,6 +1324,11 @@ document.addEventListener('click',e=>{
     S.meta.vids.push({id:uid(),url,title:title||'Mi video',mood});save();render();toast('Video guardado ⭐')}
   else if(a==='vdel'){S.meta.vids=S.meta.vids.filter(v=>v.id!==b.dataset.id);save();render();toast('Video quitado')}
   else if(a==='install')promptInstall();
+  else if(a==='syncnow'){Cloud.push().then(()=>Cloud.pull()).then(c=>{if(c){checkProgress(true);render()}toast(Cloud.pending?'Se reintentará al tener conexión':'☁️ Todo sincronizado')})}
+  else if(a==='pwreset')Auth.resetPw();
+  else if(a==='logout'){confirmOut=true;render()}
+  else if(a==='logoutNo'){confirmOut=false;render()}
+  else if(a==='logoutOk')Auth.logout();
 });
 function bindSettings(){
   const v=document.getElementById('veilR');if(v)v.addEventListener('input',()=>{S.meta.veil=+v.value;const vl=document.getElementById('veilL');if(vl)vl.style.opacity=v.value});
@@ -1339,8 +1454,8 @@ function openHabitSheet(id){
 }
 function openTaskSheet(id,secId){
   const t=id?S.tasks.find(x=>x.id===id):null;
-  const f=t?{...t,days:t.days.slice(),subsTxt:t.subs.map(z=>z.name).join('\n')}:{name:'',sec:secId||(S.sections.find(secNow)||S.sections[0]).id,freq:'daily',days:ALL.slice(),resp:'Alex',deleg:false,opt:false,subsTxt:'',est:25,path:'explorador'};let del=false;
-  const people=[...new Set(['Alex','Carmen','Asistente',...S.tasks.map(x=>x.resp)])];
+  const f=t?{...t,days:t.days.slice(),subsTxt:t.subs.map(z=>z.name).join('\n')}:{name:'',sec:secId||(S.sections.find(secNow)||S.sections[0]).id,freq:'daily',days:ALL.slice(),resp:AUTH_MODE?(S.meta.name||'Yo'):'Alex',deleg:false,opt:false,subsTxt:'',est:25,path:'explorador'};let del=false;
+  const people=[...new Set([...(AUTH_MODE?[S.meta.name||'Yo']:['Alex','Carmen','Asistente']),...S.tasks.map(x=>x.resp)])];
   const draw=()=>{host.innerHTML=`<div class="sheet-bg" data-close><form class="sheet" novalidate><h3>${t?'Editar tarea':'Nueva tarea de Focus'}</h3>
     <div class="field"><label for="t-name">Tarea</label><input class="inp" id="t-name" maxlength="120" placeholder="Ej. Revisar métricas de campañas" value="${esc(f.name)}"></div>
     <div class="two"><div class="field"><label for="t-sec">Bloque</label><select class="inp" id="t-sec">${S.sections.map(s=>`<option value="${s.id}" ${s.id===f.sec?'selected':''}>${s.emoji} ${esc(s.name)}</option>`).join('')}</select></div>
@@ -1386,9 +1501,317 @@ let lastDay=today();
 setInterval(()=>{const t=today();if(t!==lastDay){if(hoyDate===lastDay)hoyDate=t;if(fDate===lastDay)fDate=t;if(wkEnd===lastDay)wkEnd=t;lastDay=t;if(!document.getElementById('ovHost').innerHTML)render()}},30000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(FS&&FS.run)tickFocus();if(today()!==lastDay){hoyDate=fDate=wkEnd=lastDay=today();if(!document.getElementById('ovHost').innerHTML)render()}}});
 
+
+/* ---------- Nube (Firebase Firestore) ---------- */
+const Cloud=(()=>{
+  let db=null,uid=null,nick='',email='',timer=0,busy=false,again=false,pend=false,err='',mainHash='',dayHash={},maxSeen=0,lastOk=0,pulling=false;
+  const hs=str=>{let a=0xdeadbeef,b=0x41c6ce57;for(let i=0;i<str.length;i++){const c=str.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return(b>>>0).toString(36)+(a>>>0).toString(36)};
+  const bk=()=>'habitly.sync.'+uid;
+  function loadBk(){mainHash='';dayHash={};maxSeen=0;lastOk=0;try{const b=JSON.parse(localStorage.getItem(bk()))||{};mainHash=b.m||'';dayHash=b.d||{};maxSeen=b.x||0;lastOk=b.ok||0;if(b.n&&!nick)nick=b.n}catch(e){}}
+  function saveBk(){try{localStorage.setItem(bk(),JSON.stringify({m:mainHash,d:dayHash,x:maxSeen,ok:lastOk,n:nick}))}catch(e){}}
+  const mainOf=s=>JSON.stringify({habits:s.habits,tasks:s.tasks,sections:s.sections,meta:s.meta});
+  function daysOf(s){const out={},ks=new Set([...Object.keys(s.log||{}),...Object.keys(s.flog||{}),...Object.keys(s.moods||{})]);ks.forEach(d=>{out[d]=JSON.stringify({l:(s.log||{})[d]||null,f:(s.flog||{})[d]||null,m:(s.moods||{})[d]||null})});return out}
+  const uref=()=>db.collection('users').doc(uid);
+  const ms=v=>v&&typeof v.toMillis==='function'?v.toMillis():(typeof v==='number'?v:0);
+  const timeout=(p,t)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r({code:'timeout'}),t))]);
+  function setUser(u,n,e){uid=u;nick=n||'';email=e||'';db=firebase.firestore();loadBk();if(n)saveBk()}
+  function setNick(n){nick=n||nick;saveBk()}
+  function schedule(){if(!uid)return;pend=true;ui();clearTimeout(timer);timer=setTimeout(push,1200)}
+  async function push(){
+    if(!uid||!APP_ON)return;if(busy){again=true;return}
+    if(!navigator.onLine){pend=true;ui();return}
+    busy=true;ui();
+    try{
+      const mj=mainOf(S),mh=hs(mj),dj=daysOf(S),ops=[];
+      if(mh!==mainHash)ops.push(['main',mj,mh]);
+      for(const d in dj){const x=hs(dj[d]);if(dayHash[d]!==x)ops.push(['day',d,dj[d],x])}
+      for(const d in dayHash)if(!(d in dj))ops.push(['del',d]);
+      const TS=firebase.firestore.FieldValue.serverTimestamp();
+      for(let i=0;i<ops.length;i+=400){
+        const part=ops.slice(i,i+400),b=db.batch();
+        for(const o of part){if(o[0]==='main')b.set(uref(),{json:o[1],u:TS,nick,email},{merge:true});else if(o[0]==='day')b.set(uref().collection('days').doc(o[1]),{json:o[2],u:TS});else b.delete(uref().collection('days').doc(o[1]))}
+        await timeout(b.commit(),20000);
+        for(const o of part){if(o[0]==='main')mainHash=o[2];else if(o[0]==='day')dayHash[o[1]]=o[3];else delete dayHash[o[1]]}
+        saveBk();
+      }
+      lastOk=Date.now();pend=false;err='';saveBk();
+    }catch(e){err=(e&&e.code)||'error';pend=true;setTimeout(()=>{if(pend)push()},15000)}
+    busy=false;ui();if(again){again=false;push()}
+  }
+  async function fetchAll(){
+    const doc=await timeout(uref().get(),20000);
+    if(!doc.exists)return{state:null,nick:''};
+    const d=doc.data();if(d.nick)nick=d.nick;
+    if(!d.json){saveBk();return{state:null,nick:d.nick||''}}
+    const main=JSON.parse(d.json),snap=await timeout(uref().collection('days').get(),30000);
+    const st={v:2,habits:main.habits,tasks:main.tasks,sections:main.sections,meta:main.meta,log:{},flog:{},moods:{}};
+    mainHash=hs(d.json);dayHash={};maxSeen=ms(d.u);
+    snap.forEach(x=>{const v=x.data(),j=JSON.parse(v.json);if(j.l)st.log[x.id]=j.l;if(j.f)st.flog[x.id]=j.f;if(j.m)st.moods[x.id]=j.m;dayHash[x.id]=hs(v.json);maxSeen=Math.max(maxSeen,ms(v.u))});
+    lastOk=Date.now();saveBk();
+    return{state:normalize(st),nick:d.nick||''};
+  }
+  async function pull(){
+    if(!uid||!APP_ON||!navigator.onLine||busy||pulling)return false;
+    pulling=true;let changed=false;
+    try{
+      const doc=await timeout(uref().get(),15000);
+      if(doc.exists&&doc.data().json){const d=doc.data(),rh=hs(d.json);if(d.nick)nick=d.nick;
+        if(rh!==mainHash&&hs(mainOf(S))===mainHash){const m=JSON.parse(d.json),n=normalize({...S,habits:m.habits,tasks:m.tasks,sections:m.sections,meta:m.meta});S.habits=n.habits;S.tasks=n.tasks;S.sections=n.sections;S.meta=n.meta;mainHash=rh;changed=true}
+        maxSeen=Math.max(maxSeen,ms(d.u))}
+      const since=firebase.firestore.Timestamp.fromMillis(Math.max(0,maxSeen-120000));
+      const snap=await timeout(uref().collection('days').where('u','>',since).get(),20000);
+      const cur=daysOf(S);
+      snap.forEach(x=>{const v=x.data(),id=x.id,rh=hs(v.json);maxSeen=Math.max(maxSeen,ms(v.u));if(rh===dayHash[id])return;
+        if(cur[id]!==undefined&&hs(cur[id])!==(dayHash[id]||''))return;
+        const j=JSON.parse(v.json);
+        if(j.l)S.log[id]=j.l;else delete S.log[id];if(j.f)S.flog[id]=j.f;else delete S.flog[id];if(j.m)S.moods[id]=j.m;else delete S.moods[id];
+        dayHash[id]=rh;changed=true});
+      lastOk=Date.now();err='';saveBk();
+      if(changed)localSave();
+    }catch(e){err=(e&&e.code)||'error'}
+    pulling=false;ui();return changed;
+  }
+  async function flush(){if(pend&&navigator.onLine){clearTimeout(timer);await push()}return!pend}
+  function forget(){try{localStorage.removeItem('habitly.u.'+uid);localStorage.removeItem(bk())}catch(e){}}
+  const ago=t=>{const s=Math.round((Date.now()-t)/1000);return s<60?'hace un momento':s<3600?`hace ${Math.round(s/60)} min`:s<86400?`hace ${Math.round(s/3600)} h`:`hace ${Math.round(s/86400)} d`};
+  function text(){if(!uid)return'';if(busy)return'↻ Sincronizando…';if(pend&&err)return`⚠️ No se pudo sincronizar (${err}). Se reintenta solo.`;if(pend)return navigator.onLine?'↻ Subiendo cambios…':'⏳ Sin internet: tus cambios se subirán al reconectar.';return lastOk?`☁️ Todo guardado en la nube · ${ago(lastOk)}`:'☁️ Conectado a la nube'}
+  function ui(){const d=document.getElementById('syncDot');if(d){d.hidden=!uid;const ic=busy?'↻':pend?(err?'⚠️':'⏳'):'☁️';d.innerHTML=`<span>${ic}</span>`;d.classList.toggle('busy',busy);d.title=text();d.setAttribute('aria-label',text())}
+    const t=document.getElementById('syncTxt');if(t)t.textContent=text()}
+  return{setUser,setNick,schedule,push,pull,fetchAll,flush,forget,ui,text,get uid(){return uid},get nick(){return nick},get email(){return email},get pending(){return pend}};
+})();
+addEventListener('online',()=>{if(APP_ON&&Cloud.uid){Cloud.push();Cloud.pull().then(c=>{if(c&&quiet())render()})}});
+addEventListener('offline',()=>Cloud.ui());
+const quiet=()=>!document.getElementById('ovHost').innerHTML&&!document.getElementById('sheetHost').innerHTML;
+let lastPullAt=0;
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&APP_ON&&Cloud.uid&&Date.now()-lastPullAt>20000){lastPullAt=Date.now();Cloud.pull().then(c=>{if(c&&quiet()){checkProgress(true);render()}})}else if(document.hidden&&APP_ON&&Cloud.uid)Cloud.flush()});
+
+/* ---------- Plantillas para usuarios nuevos ---------- */
+function templateState(kind){
+  const t=today();
+  const st={v:2,log:{},flog:{},moods:{},meta:freshMeta(),habits:[],tasks:[],sections:[
+    {id:'man',name:'Mañana',emoji:'🌅',from:6,to:9,days:ALL.slice()},{id:'tp',name:'Trabajo profundo',emoji:'🎯',from:9,to:13,days:ALL.slice()},
+    {id:'tar',name:'Tarde',emoji:'☀️',from:13,to:18,days:ALL.slice()},{id:'cie',name:'Cierre',emoji:'🌙',from:20,to:22,days:ALL.slice()}]};
+  st.meta.my=[];
+  if(kind==='ejemplo'){
+    const h=(name,emoji,color,path,x={})=>Object.assign({id:uid(),name,emoji,color,path,type:'check',target:1,unit:'',days:ALL.slice(),created:t},x);
+    st.habits=[h('Meditar 10 minutos','🧘','#8B5CF6','despierto'),h('Hacer ejercicio','💪','#F2708A','despierto'),h('Leer 20 minutos','📚','#4F8BF7','inventor'),h('Tomar agua','💧','#2EC4B6','despierto',{type:'count',target:8,unit:'vasos'}),h('Planear el día','🗓️','#F5B547','explorador')];
+    const T=(sec,name,o={})=>Object.assign({id:uid(),sec,name,freq:'daily',days:ALL.slice(),resp:'Yo',deleg:false,opt:false,subs:[],est:0,path:'explorador',created:t},o);
+    st.tasks=[T('man','Revisar pendientes y elegir 3 prioridades',{est:10}),T('tp','Trabajo profundo en la prioridad #1',{est:90,path:'inventor'}),T('tar','Responder mensajes y correos',{est:30}),T('cie','Revisar avances y preparar mañana',{est:15})];
+  }
+  return normalize(st);
+}
+function legacyInfo(){
+  try{if(localStorage.getItem('habitly.claimed'))return null;const s=JSON.parse(localStorage.getItem(KEY));if(!s||!Array.isArray(s.habits))return null;
+    const days=new Set([...Object.keys(s.log||{}),...Object.keys(s.flog||{})]).size;if(!s.habits.length&&!days)return null;
+    return{state:s,habits:s.habits.length,tasks:(s.tasks||[]).length,days}}catch(e){return null}
+}
+
+/* ---------- Pantalla de acceso ---------- */
+const Auth=(()=>{
+  const MOUTH={ok:'M93 112 q7 6 14 0',joy:'M90 110 q10 11 20 0',sad:'M93 116 q7 -5 14 0'};
+  const EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYEOFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7c1.8 0 3.4-.5 4.8-1.3"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+  const NICK_RE=/^[a-z0-9_.]{3,20}$/,EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const STR=[['',''],['Muy débil','var(--danger)'],['Chispa · débil','#F5B547'],['Reactor · buena','#3DBE8B'],['Cosmos · excelente','var(--ok)']];
+  const QUOTES=[['Enfocarse es decir que no a cien buenas ideas.','Inspirado en Steve Jobs'],['Piensa desde primeros principios.','Inspirado en Elon Musk'],['Imagina el diseño completo antes de tocar una herramienta.','Inspirado en Nikola Tesla'],['Un paso a la vez, con atención completa en el que estás dando.','Inspirado en Buda'],['Lo que estorba el camino se vuelve el camino.','Inspirado en Marco Aurelio'],['No es que tengamos poco tiempo, es que perdemos mucho.','Inspirado en Séneca']];
+  const ERR={'auth/invalid-credential':'El correo/nickname o la contraseña no coinciden. Revisa mayúsculas y vuelve a intentar.','auth/wrong-password':'El correo/nickname o la contraseña no coinciden. Revisa mayúsculas y vuelve a intentar.','auth/user-not-found':'El correo/nickname o la contraseña no coinciden. Revisa mayúsculas y vuelve a intentar.','auth/invalid-login-credentials':'El correo/nickname o la contraseña no coinciden. Revisa mayúsculas y vuelve a intentar.',
+    'auth/invalid-email':'Ese correo no es válido.','auth/email-already-in-use':'Ya existe una cuenta con ese correo. Toca "Entrar" para iniciar sesión.','auth/weak-password':'La contraseña es muy débil: usa al menos 8 caracteres.','auth/too-many-requests':'Demasiados intentos. Espera unos minutos o recupera tu contraseña.',
+    'auth/network-request-failed':'Sin conexión. Revisa tu internet e intenta de nuevo.','timeout':'La conexión está tardando demasiado. Revisa tu internet e intenta de nuevo.','unavailable':'Sin conexión. Revisa tu internet e intenta de nuevo.','nick-taken':'Ese nickname acaba de ser tomado. Elige otro.',
+    'permission-denied':'Firebase rechazó el acceso. Revisa que las reglas de Firestore estén publicadas.','auth/operation-not-allowed':'El acceso con correo no está activado en Firebase (Authentication → Método de acceso).','auth/unauthorized-domain':'Este sitio no está autorizado en Firebase (Authentication → Configuración → Dominios autorizados).'};
+  const errText=e=>ERR[e&&e.code]||`Algo salió mal (${(e&&e.code)||'error'}). Intenta de nuevo.`;
+  let fa=null,fdb=null,view='splash',fails=0,reg={},signing=false,covering=false,booted=false;
+  const $=id=>document.getElementById(id);
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  function avatarSVG(p='a'){return`<svg viewBox="0 0 200 200" class="av" role="img" aria-label="Chispa, tu avatar">
+    <defs><radialGradient id="${p}c" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".38" style="stop-color:#00C2F0"/><stop offset="1" style="stop-color:var(--apc,#5B7CFF)"/></radialGradient>
+    <radialGradient id="${p}p" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#BDEFFF"/></radialGradient>
+    <radialGradient id="${p}h"><stop offset="0" style="stop-color:#00C2F0" stop-opacity=".45"/><stop offset=".6" style="stop-color:var(--apc,#5B7CFF)" stop-opacity=".13"/><stop offset="1" style="stop-color:var(--apc,#5B7CFF)" stop-opacity="0"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="86" fill="url(#${p}h)" class="breathe"/>
+    <circle class="flick" cx="40" cy="70" r="2.6" fill="#00C2F0"/><circle class="flick" cx="164" cy="60" r="2" fill="#00C2F0" style="animation-delay:.4s"/><circle class="flick" cx="156" cy="146" r="2.4" fill="#00C2F0" style="animation-delay:.8s"/>
+    <g class="bob"><circle cx="100" cy="100" r="48" fill="url(#${p}c)"/><ellipse cx="83" cy="78" rx="13" ry="7.5" fill="#fff" opacity=".55" transform="rotate(-30 83 78)"/>
+      <g ${p==='a'?'id="aeyes"':''}><g class="alid"><rect x="78" y="88" width="11" height="17" rx="5.5" fill="#0B1020"/><rect x="111" y="88" width="11" height="17" rx="5.5" fill="#0B1020"/></g><circle cx="86" cy="92" r="2.2" fill="#fff"/><circle cx="119" cy="92" r="2.2" fill="#fff"/></g>
+      <ellipse cx="73" cy="108" rx="6" ry="3.4" fill="#FF7AA8" opacity=".45"/><ellipse cx="127" cy="108" rx="6" ry="3.4" fill="#FF7AA8" opacity=".45"/>
+      <path ${p==='a'?'id="amouth"':''} d="${p==='a'?MOUTH.ok:MOUTH.joy}" stroke="#0B1020" stroke-width="3" fill="none" stroke-linecap="round"/>
+      ${p==='a'?[['ahl',52],['ahr',148]].map(([i,cx])=>`<g class="ahand" id="${i}"><ellipse cx="${cx}" cy="108" rx="15" ry="13" fill="url(#${p}p)" stroke="#00C2F0" stroke-opacity=".55" stroke-width="2"/><path d="M${cx-7} 100 q2 -4 4 0 M${cx-2} 98 q2 -4 4 0 M${cx+3} 100 q2 -4 4 0" stroke="#00C2F0" stroke-opacity=".6" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>`).join(''):''}
+    </g></svg>`}
+  function look(dx,dy){if(covering||!$('aeyes'))return;$('aeyes').style.transform=`translate(${dx}px,${dy}px)`}
+  function mouth(k){const m=$('amouth');if(m)m.setAttribute('d',MOUTH[k]||MOUTH.ok)}
+  function cover(on,pk){covering=on;const L=$('ahl'),R=$('ahr');if(!L)return;L.style.opacity=R.style.opacity=on?'1':'';L.style.transform=on?`translate(31px,${pk?6:-12}px) scale(1)`:'';R.style.transform=on?'translate(-32px,-12px) scale(1)':'';if(on&&$('aeyes'))$('aeyes').style.transform='translate(0px,2px)'}
+  let sayT;function say(t,ms=2600){const b=$('aSay');if(!b)return;b.textContent=t;b.hidden=false;b.style.animation='none';b.offsetHeight;b.style.animation='';clearTimeout(sayT);if(ms)sayT=setTimeout(()=>b.hidden=true,ms)}
+  function shake(){const c=$('aCard');if(!c)return;c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');buzz([30,40,30])}
+  function busyBtn(btn,on,txt){if(!btn)return;btn.disabled=on;btn.innerHTML=on?`<span class="aspin"></span>${txt}`:txt}
+  function restoreLook(){try{const l=JSON.parse(localStorage.getItem('habitly.look'));if(l){document.body.dataset.mode=l.mode||'cielo';if(l.accent){document.documentElement.style.setProperty('--accent',l.accent);document.documentElement.style.setProperty('--accent-ink',inkFor(l.accent))}}else document.body.dataset.mode='cielo'}catch(e){document.body.dataset.mode='cielo'}}
+  function shell(){const q=QUOTES[Math.floor(Math.random()*QUOTES.length)];
+    $('auth').innerHTML=`<div class="awrap"><div class="abrand"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 16a2 2 0 0 1 2 2a4 4 0 0 1-4 4a6 6 0 0 1-6-6a8 8 0 0 1 8-8a10 10 0 0 1 10 10a12 12 0 0 1-12 12" fill="none" style="stroke:var(--accent)" stroke-width="3.2" stroke-linecap="round"/></svg>Habitly</div>
+      <div class="ahero" id="aHero" aria-hidden="true"><div class="abubble" id="aSay" hidden></div>${avatarSVG('a')}</div>
+      <div class="acard" id="aCard" role="main" aria-live="polite"></div><div class="aquote"><b>${esc(q[0])}</b>${esc(q[1])}</div></div><div id="aOv"></div>`;
+    $('aHero').onclick=()=>{const s=$('aHero').querySelector('svg');s.animate([{transform:'scale(1)'},{transform:'scale(1.1) rotate(-4deg)'},{transform:'scale(1)'}],{duration:450,easing:'ease-out'});mouth('joy');say(['¡Jeje! ⚡','Aquí te espero 🪷','¿Listo para avanzar? 🚀'][Math.floor(Math.random()*3)]);setTimeout(()=>mouth('ok'),900)};
+  }
+  addEventListener('pointermove',e=>{if(APP_ON||!$('aHero'))return;const a=document.activeElement;if(a&&a.tagName==='INPUT')return;const r=$('aHero').getBoundingClientRect();look(Math.max(-6,Math.min(6,(e.clientX-r.left-r.width/2)/40)),Math.max(-5,Math.min(6,(e.clientY-r.top-r.height/2)/40)))});
+
+  function boot(){
+    restoreLook();document.getElementById('auth').hidden=false;shell();view='splash';draw();
+    if(!window.firebase||typeof firebase.initializeApp!=='function'){view='nosdk';draw();return}
+    try{if(!firebase.apps.length)firebase.initializeApp(FB_CONFIG)}catch(e){}
+    fa=firebase.auth();fa.languageCode='es';fdb=firebase.firestore();
+    fa.onAuthStateChanged(u=>{if(!u){if(APP_ON){location.reload();return}if(view==='splash'||view==='loading'||view==='offline'){view='login';draw()}return}if(signing||booted)return;enter(u,false)});
+  }
+  async function enter(u,fromLogin){
+    booted=true;
+    let cached=null;try{cached=JSON.parse(localStorage.getItem('habitly.u.'+u.uid))}catch(e){}
+    Cloud.setUser(u.uid,'',u.email);
+    if(cached&&cached.v===2&&cached.sections){S=normalize(cached);if(fromLogin)await celebrateIn();startApp();setTimeout(()=>Cloud.pull().then(c=>{if(c&&quiet()){checkProgress(true);render()}}),300);return}
+    view='loading';draw();
+    try{const r=await Cloud.fetchAll();
+      if(r.state){S=r.state;Cloud.setNick(r.nick);localSave();if(fromLogin)await celebrateIn();startApp();return}
+      reg={nick:r.nick||Cloud.nick||'',name:prettyName(r.nick||(u.email||'').split('@')[0])};view='ob1';draw();
+    }catch(e){booted=false;view='offline';draw()}
+  }
+  async function celebrateIn(){mouth('joy');cover(false);say('¡Bienvenido de vuelta! ✨',0);confetti(80);buzz([20,30,60]);await wait(900)}
+  const prettyName=n=>String(n||'').replace(/[_.]+/g,' ').trim().replace(/^\w/,c=>c.toUpperCase());
+
+  function draw(){
+    const c=$('aCard');if(!c)return;c.classList.add('afade');setTimeout(()=>c.classList.remove('afade'),400);
+    const tabs=`<div class="atabs" role="tablist"><button role="tab" aria-selected="${view==='login'}" data-ago="login">Entrar</button><button role="tab" aria-selected="${view==='signup'}" data-ago="signup">Crear cuenta</button></div>`;
+    if(view==='splash'||view==='loading')c.innerHTML=`<div class="center"><span class="aspin" style="width:28px;height:28px;color:var(--accent)"></span><b>${view==='splash'?'Despertando a Chispa…':'Cargando tu progreso…'}</b></div>`;
+    else if(view==='nosdk')c.innerHTML=`<div class="center"><h1>Necesitas internet</h1><p class="lead" style="margin:0">Para entrar por primera vez en este dispositivo, Habitly necesita conexión. Revisa tu internet y vuelve a intentar.</p><button class="abtn" data-areload="1">Reintentar</button></div>`;
+    else if(view==='offline')c.innerHTML=`<div class="center"><h1>No pude cargar tu progreso</h1><p class="lead" style="margin:0">Parece que no hay conexión. La primera vez en cada dispositivo necesitas internet para descargar tus datos.</p><button class="abtn" data-areload="1">Reintentar</button><button class="abtn ghost" data-aout="1">Cerrar sesión</button></div>`;
+    else if(view==='login')c.innerHTML=tabs+loginHTML();
+    else if(view==='signup')c.innerHTML=tabs+signupHTML();
+    else if(view==='forgot')c.innerHTML=forgotHTML();
+    else if(view.startsWith('ob'))c.innerHTML=obHTML();
+    bind();
+  }
+  const pw=(id,label,auto)=>`<div class="afield"><label for="${id}">${label}</label><div class="inwrap"><span class="ico">🔒</span><input class="ainp" id="${id}" type="password" autocomplete="${auto}" required><button type="button" class="aeye" data-aeye="${id}" aria-label="Mostrar contraseña">${EYE}</button></div></div>`;
+  const loginHTML=()=>`<h1>Qué gusto verte de nuevo</h1><p class="lead">Entra para seguir subiendo de nivel.</p>
+    <form id="aLogin" novalidate><div class="afield"><label for="alId">Correo o nickname</label><div class="inwrap"><span class="ico">👤</span><input class="ainp" id="alId" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="tu_nick o tu@correo.com" required></div></div>
+    ${pw('alPw','Contraseña','current-password')}
+    <div class="arow"><label class="acheck"><input type="checkbox" id="alKeep" checked> Mantener sesión</label><button type="button" class="alink${fails>=2?' glow':''}" data-ago="forgot">¿Olvidaste tu contraseña?</button></div>
+    <div id="alMsg"></div><button class="abtn" type="submit" id="alBtn">Entrar</button></form>`;
+  const signupHTML=()=>`<h1>Crea tu cuenta</h1><p class="lead">Tu Chispa nace en cuanto termines.</p>
+    <form id="aSign" novalidate>
+    <div class="afield"><label for="asNick">Nickname</label><div class="inwrap"><span class="ico">✨</span><input class="ainp" id="asNick" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" placeholder="ej. alex_m" required><span class="astate" id="asNickSt"></span></div><p class="ahint" id="asNickH">3 a 20 caracteres: letras, números, punto o guion bajo.</p></div>
+    <div class="afield"><label for="asMail">Correo</label><div class="inwrap"><span class="ico">✉️</span><input class="ainp" id="asMail" type="email" inputmode="email" autocomplete="email" autocapitalize="none" placeholder="tu@correo.com" required></div><p class="ahint" id="asMailH">Lo usamos para recuperar tu contraseña.</p></div>
+    ${pw('asPw','Contraseña','new-password')}<div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i></div><p class="ahint" id="asPwH">Mínimo 8 caracteres.</p>
+    ${INVITE_CODE?`<div class="afield"><label for="asInv">Código de invitación</label><div class="inwrap"><span class="ico">🎟️</span><input class="ainp" id="asInv" autocapitalize="characters" spellcheck="false" placeholder="HABITLY-XXXX" required></div><p class="ahint" id="asInvH">Pídelo a quien te invitó.</p></div>`:''}
+    <div id="asMsg"></div><button class="abtn" type="submit" id="asBtn">Crear cuenta</button></form>`;
+  const forgotHTML=()=>`<button class="alink" data-ago="login" style="align-self:flex-start">← Volver</button><h1>Recupera tu acceso</h1><p class="lead">Escribe tu correo o nickname y te mandamos un enlace para crear una contraseña nueva.</p>
+    <form id="aForgot" novalidate><div class="afield"><label for="afId">Correo o nickname</label><div class="inwrap"><span class="ico">👤</span><input class="ainp" id="afId" autocapitalize="none" spellcheck="false" required></div></div><div id="afMsg"></div><button class="abtn" type="submit" id="afBtn">Enviar enlace</button></form>`;
+  function obHTML(){
+    const st=+view.slice(2),dots=`<div class="steps" aria-label="Paso ${st} de 3">${[1,2,3].map(i=>`<i class="${i<=st?'on':''}"></i>`).join('')}</div>`;
+    if(st===1)return`${dots}<h1>¿Cómo quieres que te llame Chispa?</h1><p class="lead">Así te saludará cada día.</p><form id="aOb1" novalidate><div class="afield"><label for="aoName">Tu nombre</label><div class="inwrap"><span class="ico">👋</span><input class="ainp" id="aoName" maxlength="24" value="${esc(reg.name||'')}" required></div></div><button class="abtn" type="submit">Continuar</button></form>`;
+    if(st===2)return`${dots}<h1>Elige tu camino principal</h1><p class="lead">Le da forma y color a tu Chispa. Después puedes avanzar en los tres.</p>
+      <div class="apaths">${PK.map(k=>{const p=PATHS[k];return`<button class="apath" style="--c:var(--${p.v})" data-apath="${k}" aria-pressed="${reg.path===k}"><span class="sym">${p.e}</span><span><b>${p.n} · ${p.m}</b><small>${p.d}</small></span></button>`}).join('')}</div>
+      <button class="abtn" data-anext="3" ${reg.path?'':'disabled'}>Continuar</button><button class="abtn ghost" data-ago="ob1">← Atrás</button>`;
+    const lg=legacyInfo();if(lg&&!reg.tpl)reg.tpl='device';
+    return`${dots}<h1>¿Cómo quieres empezar?</h1><p class="lead">Puedes cambiar todo después.</p><div class="apaths">
+      ${lg?`<button class="apath" data-atpl="device" aria-pressed="${reg.tpl==='device'}"><span class="sym">📲</span><span><b>Mi progreso de este dispositivo</b><small>${lg.habits} hábitos · ${lg.tasks} tareas de Focus · ${lg.days} ${lg.days===1?'día registrado':'días registrados'}. Se sube a tu cuenta.</small></span></button>`:''}
+      <button class="apath" data-atpl="ejemplo" aria-pressed="${reg.tpl==='ejemplo'}"><span class="sym">🧬</span><span><b>Plantilla de ejemplo</b><small>Hábitos y bloques comunes para arrancar</small><ul><li>Meditar</li><li>Ejercicio</li><li>Leer 20 min</li><li>Tomar agua</li><li>Planear el día</li></ul></span></button>
+      <button class="apath" data-atpl="cero" aria-pressed="${reg.tpl==='cero'}"><span class="sym">🌱</span><span><b>Empezar desde cero</b><small>Tú creas tus propios hábitos y tareas</small></span></button></div>
+      <div id="aoMsg"></div><button class="abtn" data-aborn="1" ${reg.tpl?'':'disabled'}>Hacer nacer a mi Chispa ✨</button><button class="abtn ghost" data-ago="ob2">← Atrás</button>`;
+  }
+  function bind(){
+    const c=$('aCard');
+    c.querySelectorAll('[data-ago]').forEach(b=>b.onclick=()=>{view=b.dataset.ago;cover(false);mouth('ok');draw();focusFirst()});
+    c.querySelectorAll('[data-areload]').forEach(b=>b.onclick=()=>location.reload());
+    c.querySelectorAll('[data-aout]').forEach(b=>b.onclick=async()=>{Cloud.forget();try{await fa.signOut()}catch(e){}location.reload()});
+    c.querySelectorAll('[data-aeye]').forEach(b=>b.onclick=()=>{const i=$(b.dataset.aeye),show=i.type==='password';i.type=show?'text':'password';b.innerHTML=show?EYEOFF:EYE;b.setAttribute('aria-label',show?'Ocultar contraseña':'Mostrar contraseña');cover(true,show);say(show?'Solo un poquito… 👀':'No veo nada 🙈',1500);i.focus()});
+    c.querySelectorAll('input.ainp').forEach(i=>{
+      const isPw=i.id==='alPw'||i.id==='asPw';
+      i.addEventListener('focus',()=>{if(isPw){cover(true,i.type==='text');mouth('ok')}else{cover(false);track(i)}});
+      i.addEventListener('blur',()=>setTimeout(()=>{const a=document.activeElement;if(!a||!(a.id==='alPw'||a.id==='asPw'||a.dataset.aeye!==undefined))cover(false);if(!a||a.tagName!=='INPUT')look(0,0)},10));
+      i.addEventListener('input',()=>{if(!isPw)track(i);i.classList.remove('bad')});
+    });
+    const fl=$('aLogin');if(fl)fl.onsubmit=doLogin;
+    const fs=$('aSign');if(fs){fs.onsubmit=doSignup;$('asNick').addEventListener('input',checkNick);$('asPw').addEventListener('input',checkPw);$('asMail').addEventListener('blur',checkMail)}
+    const ff=$('aForgot');if(ff)ff.onsubmit=doForgot;
+    const o1=$('aOb1');if(o1)o1.onsubmit=e=>{e.preventDefault();const v=$('aoName').value.trim();if(!v){$('aoName').classList.add('bad');shake();return}reg.name=v;view='ob2';draw();say(`¡Mucho gusto, ${v}! 😄`)};
+    c.querySelectorAll('[data-apath]').forEach(b=>b.onclick=()=>{reg.path=b.dataset.apath;document.documentElement.style.setProperty('--apc',pcol(reg.path));mouth('joy');say(`${PATHS[reg.path].e} ¡Camino del ${PATHS[reg.path].n}!`);draw();setTimeout(()=>mouth('ok'),900)});
+    c.querySelectorAll('[data-anext]').forEach(b=>b.onclick=()=>{if(reg.path){view='ob'+b.dataset.anext;draw()}});
+    c.querySelectorAll('[data-atpl]').forEach(b=>b.onclick=()=>{reg.tpl=b.dataset.atpl;draw()});
+    c.querySelectorAll('[data-aborn]').forEach(b=>b.onclick=()=>{if(reg.tpl)birth()});
+  }
+  function focusFirst(){const i=$('aCard').querySelector('input.ainp');if(i&&matchMedia('(pointer:fine)').matches)setTimeout(()=>i.focus(),60)}
+  function track(i){const r=Math.min(1,i.value.length/26);look(-6+12*r,5)}
+
+  async function resolveEmail(id){id=id.trim();if(id.includes('@'))return id;const d=await fdb.collection('nicks').doc(id.toLowerCase()).get();return d.exists?d.data().email:null}
+  async function doLogin(e){
+    e.preventDefault();const id=$('alId'),p=$('alPw'),msg=$('alMsg'),btn=$('alBtn');msg.innerHTML='';
+    if(!id.value.trim()){id.classList.add('bad');id.focus();shake();return}
+    if(!p.value){p.classList.add('bad');p.focus();shake();return}
+    busyBtn(btn,true,'Entrando…');
+    try{
+      const em=await resolveEmail(id.value);if(!em)throw{code:'auth/invalid-credential'};
+      await fa.setPersistence($('alKeep').checked?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION);
+      signing=true;const cred=await fa.signInWithEmailAndPassword(em,p.value);signing=false;
+      fails=0;await enter(cred.user,true);
+    }catch(err){signing=false;busyBtn(btn,false,'Entrar');fails++;shake();cover(false);mouth('sad');say('Mmm… algo no coincide 😕');
+      msg.innerHTML=`<div class="amsg err">⚠️ <span>${esc(errText(err))}</span></div>`;
+      if(fails>=2){const l=$('aCard').querySelector('[data-ago="forgot"]');l&&l.classList.add('glow')}p.value='';p.focus()}
+  }
+  let nickT,nickSeq=0;
+  function checkNick(){
+    const i=$('asNick'),h=$('asNickH'),st=$('asNickSt');i.value=i.value.toLowerCase().replace(/\s/g,'');const v=i.value,seq=++nickSeq;clearTimeout(nickT);
+    i.classList.remove('good','bad');h.className='ahint';st.textContent='';
+    if(!v){h.textContent='3 a 20 caracteres: letras, números, punto o guion bajo.';return}
+    if(!NICK_RE.test(v)){h.className='ahint err';h.textContent=v.length<3?'Muy corto, mínimo 3 caracteres.':'Solo letras, números, punto o guion bajo.';i.classList.add('bad');return}
+    st.innerHTML='<span class="aspin" style="width:14px;height:14px;color:var(--muted)"></span>';
+    nickT=setTimeout(async()=>{let taken=false;try{taken=(await fdb.collection('nicks').doc(v).get()).exists}catch(e){st.textContent='';h.textContent='No pude revisar si está disponible (sin conexión).';return}
+      if(seq!==nickSeq)return;
+      if(taken){st.textContent='✗';st.style.color='var(--danger)';h.className='ahint err';h.textContent=`@${v} ya está ocupado. Prueba ${v}_${Math.floor(Math.random()*90+10)}.`;i.classList.add('bad')}
+      else{st.textContent='✓';st.style.color='var(--ok)';h.className='ahint ok';h.textContent=`@${v} está disponible`;i.classList.add('good')}},450);
+  }
+  function checkMail(){const i=$('asMail'),h=$('asMailH');if(!i.value)return;const ok=EMAIL_RE.test(i.value.trim());i.classList.toggle('bad',!ok);i.classList.toggle('good',ok);h.className='ahint'+(ok?'':' err');h.textContent=ok?'Lo usamos para recuperar tu contraseña.':'Ese correo no parece válido.'}
+  function strength(p){let s=0;if(p.length>=8)s++;if(p.length>=12)s++;if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;if(/\d/.test(p))s++;if(/[^A-Za-z0-9]/.test(p))s++;return Math.min(4,Math.max(p?1:0,s-(p.length<8?1:0)))}
+  function checkPw(){const v=$('asPw').value,s=strength(v);$('aCard').querySelectorAll('.meter i').forEach((m,k)=>m.style.background=k<s?STR[s][1]:'');const h=$('asPwH');h.className='ahint';h.textContent=v?(v.length<8?`Faltan ${8-v.length} caracteres`:STR[s][0]):'Mínimo 8 caracteres.';if(v&&v.length<8)h.className='ahint err'}
+  async function doSignup(e){
+    e.preventDefault();const n=$('asNick'),m=$('asMail'),p=$('asPw'),inv=$('asInv'),msg=$('asMsg'),btn=$('asBtn');msg.innerHTML='';
+    const nv=n.value.trim().toLowerCase(),errs=[];
+    if(!NICK_RE.test(nv)||n.classList.contains('bad')){errs.push(n);n.classList.add('bad')}
+    if(!EMAIL_RE.test(m.value.trim())){errs.push(m);m.classList.add('bad');checkMail()}
+    if(p.value.length<8){errs.push(p);p.classList.add('bad');checkPw()}
+    if(inv&&inv.value.trim().toUpperCase()!==String(INVITE_CODE).toUpperCase()){errs.push(inv);inv.classList.add('bad');$('asInvH').className='ahint err';$('asInvH').textContent='Ese código no es válido.'}
+    if(errs.length){shake();mouth('sad');say('Revisemos lo marcado en rojo 🔍');errs[0].focus();msg.innerHTML=`<div class="amsg err">⚠️ <span>Corrige ${errs.length===1?'el campo marcado':'los '+errs.length+' campos marcados'} para continuar.</span></div>`;return}
+    busyBtn(btn,true,'Creando tu cuenta…');signing=true;
+    try{
+      if((await fdb.collection('nicks').doc(nv).get()).exists)throw{code:'nick-taken'};
+      await fa.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      const cred=await fa.createUserWithEmailAndPassword(m.value.trim(),p.value);
+      try{await fdb.collection('nicks').doc(nv).set({uid:cred.user.uid,email:cred.user.email})}catch(x){try{await cred.user.delete()}catch(y){}throw{code:'nick-taken'}}
+      try{await fdb.collection('users').doc(cred.user.uid).set({nick:nv,email:cred.user.email},{merge:true})}catch(x){}
+      Cloud.setUser(cred.user.uid,nv,cred.user.email);booted=true;
+      reg={nick:nv,name:prettyName(nv)};cover(false);mouth('joy');say('¡Cuenta creada! Ahora conozcámonos 😄');view='ob1';draw();focusFirst();
+    }catch(err){busyBtn(btn,false,'Crear cuenta');shake();mouth('sad');
+      if(err.code==='nick-taken'){n.classList.add('bad');$('asNickH').className='ahint err';$('asNickH').textContent=ERR['nick-taken']}
+      if(err.code==='auth/email-already-in-use'){m.classList.add('bad')}
+      msg.innerHTML=`<div class="amsg err">⚠️ <span>${esc(errText(err))}</span></div>`}
+    signing=false;
+  }
+  async function doForgot(e){
+    e.preventDefault();const i=$('afId'),msg=$('afMsg'),btn=$('afBtn');if(!i.value.trim()){i.classList.add('bad');shake();return}
+    busyBtn(btn,true,'Enviando…');
+    try{const em=await resolveEmail(i.value);if(em)await fa.sendPasswordResetEmail(em)}catch(err){if(err&&(err.code==='auth/network-request-failed'||err.code==='unavailable')){busyBtn(btn,false,'Enviar enlace');msg.innerHTML=`<div class="amsg err">⚠️ <span>${esc(errText(err))}</span></div>`;return}}
+    busyBtn(btn,false,'Enviar enlace');mouth('joy');say('¡Listo! Revisa tu correo 📬');
+    msg.innerHTML='<div class="amsg ok">📬 <span>Si existe una cuenta con ese dato, te llegará un enlace para crear una contraseña nueva. Revisa también tu carpeta de spam.</span></div>';
+  }
+  function birth(){
+    const lg=reg.tpl==='device'?legacyInfo():null;
+    let st=lg?normalize(lg.state):templateState(reg.tpl==='ejemplo'?'ejemplo':'cero');
+    st.meta.name=reg.name;st.meta.path=reg.path;st.meta.seen=false;
+    S=st;
+    const p=PATHS[reg.path];
+    $('aOv').innerHTML=`<div class="abirth" role="dialog" aria-modal="true"><div class="stage"><div class="rays"></div><div class="seed"></div><div class="born">${avatarSVG('b')}</div></div><div class="ov-flash"></div>
+      <h2>¡Nació tu Chispa, ${esc(reg.name)}!</h2><p>${p.e} Camino del ${p.n} · Nivel 1${reg.tpl==='ejemplo'?' · 5 hábitos listos':lg?' · tu progreso a salvo':''}</p><div class="go"><button class="abtn" id="aGo">Entrar a Habitly</button></div></div>`;
+    buzz([40,60,40,60,160]);setTimeout(()=>confetti(170),1600);
+    $('aGo').onclick=()=>{if(lg)try{localStorage.setItem('habitly.claimed',Cloud.uid)}catch(e){}localSave();$('aOv').innerHTML='';startApp();Cloud.push()};
+  }
+  async function logout(){await Cloud.flush();Cloud.forget();try{await fa.signOut()}catch(e){}location.reload()}
+  async function resetPw(){try{await fa.sendPasswordResetEmail(Cloud.email);toast('📬 Te enviamos un enlace a tu correo')}catch(e){toast(errText(e))}}
+  return{boot,logout,resetPw};
+})();
+function startApp(){APP_ON=true;document.getElementById('auth').hidden=true;document.getElementById('auth').innerHTML='';document.documentElement.classList.remove('authing');applyTheme();checkProgress(true);nav();Cloud.ui()}
+
 addEventListener('hashchange',nav);
-applyTheme();
-checkProgress(true);
-nav();
+if(AUTH_MODE)Auth.boot();else startApp();
 })();
 </script>
