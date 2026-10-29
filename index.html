@@ -584,6 +584,7 @@ body[data-mode="noche"] #auth .apath{background:#121A31}
   <div class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 16a2 2 0 0 1 2 2a4 4 0 0 1-4 4a6 6 0 0 1-6-6a8 8 0 0 1 8-8a10 10 0 0 1 10 10a12 12 0 0 1-12 12" fill="none" style="stroke:var(--accent)" stroke-width="3.2" stroke-linecap="round"/></svg>Habitly</div>
   <a class="lvpill num" id="lvPill" href="#logros">Nv 1</a>
   <button class="install" id="installBtn" hidden>Instalar</button>
+  <button class="syncdot" id="fsBtn" hidden aria-label="Pantalla completa" title="Pantalla completa"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
   <a class="syncdot" id="syncDot" href="#ajustes" hidden></a>
   <a class="gear" href="#ajustes" aria-label="Ajustes, apariencia y respaldo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>
 </div></header>
@@ -1150,7 +1151,7 @@ ajustes(){
       <li>Mantén presionada la pantalla de inicio → Ajustes y activa <b>Agregar íconos de apps nuevas a la pantalla de inicio</b>.</li>
       <li>Desactiva por un momento cualquier VPN, bloqueador de anuncios o <b>DNS privado</b> (Ajustes → Conexión y compartir).</li>
       <li>Usa wifi, deja Chrome abierto 2 o 3 minutos y busca Habitly en tu lista de apps.</li>
-      <li>Si aun así no aparece: menú ⋮ → <b>Agregar a la pantalla principal → Crear acceso directo</b>. Funciona igual, con tu cuenta y tu progreso.</li></ol></details>`}</section>
+      <li>Si aun así no aparece: menú ⋮ → <b>Agregar a la pantalla principal → Crear acceso directo</b>. Funciona igual, con tu cuenta y tu progreso. Activa abajo la pantalla completa automática.</li></ol></details>${FS_OK?`<button class="switch" role="switch" aria-checked="${fsAuto()}" data-act="fsauto"><span>⛶ Pantalla completa automática <small class="sub" style="display:block;font-weight:500;font-size:12.5px">Para cuando la abres desde un acceso directo: al primer toque se oculta la barra de Chrome.</small></span><i></i></button>`:''}`}</section>
   <section class="panel stack danger-panel"><h3>🗑️ Vaciar aplicación</h3><p class="sub">Borra hábitos, tareas, historial y niveles de este dispositivo.</p>
     ${confirmWipe?'<div class="confirm"><b>Esto no se puede deshacer.</b><div class="row2"><button class="btn dng" data-act="wipeOk">Borrar todo</button><button class="btn ghost" data-act="wipeNo">Cancelar</button></div></div>':'<button class="btn out" style="color:var(--danger)" data-act="wipe">Vaciar datos</button>'}</section>`;
 }
@@ -1330,6 +1331,7 @@ document.addEventListener('click',e=>{
     S.meta.vids.push({id:uid(),url,title:title||'Mi video',mood});save();render();toast('Video guardado ⭐')}
   else if(a==='vdel'){S.meta.vids=S.meta.vids.filter(v=>v.id!==b.dataset.id);save();render();toast('Video quitado')}
   else if(a==='install')promptInstall();
+  else if(a==='fsauto'){try{localStorage.setItem('habitly.fs',fsAuto()?'0':'1')}catch(err){}render();if(fsAuto())goFull()}
   else if(a==='syncnow'){Cloud.push().then(()=>Cloud.pull()).then(c=>{if(c){checkProgress(true);render()}toast(Cloud.pending?'Se reintentará al tener conexión':'☁️ Todo sincronizado')})}
   else if(a==='pwreset')Auth.resetPw();
   else if(a==='logout'){confirmOut=true;render()}
@@ -1496,6 +1498,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&host.innerHTML)clos
 
 (()=>{const sh=[];for(let i=0;i<90;i++){sh.push(`${(Math.random()*100).toFixed(1)}vw ${(Math.random()*70).toFixed(1)}vh 0 ${Math.random()<.15?'1px':'0'} rgba(255,255,255,${(.3+Math.random()*.7).toFixed(2)})`)}document.getElementById('stars').style.boxShadow=sh.join(',')})();
 
+/* Pantalla completa para accesos directos (cuando no se pudo instalar como app) */
+const inBrowser=()=>{try{return matchMedia('(display-mode: browser)').matches&&!navigator.standalone}catch(e){return false}};
+const FS_OK=!!(document.documentElement.requestFullscreen)&&/Android/i.test(navigator.userAgent)&&inBrowser();
+const fsAuto=()=>{try{return localStorage.getItem('habitly.fs')==='1'}catch(e){return false}};
+function goFull(){if(!FS_OK||document.fullscreenElement)return;try{const p=document.documentElement.requestFullscreen({navigationUI:'hide'});if(p&&p.catch)p.catch(()=>{})}catch(e){}}
+function fsUI(){const b=document.getElementById('fsBtn');if(b)b.hidden=!FS_OK||!!document.fullscreenElement||!APP_ON}
+if(FS_OK){document.getElementById('fsBtn').addEventListener('click',goFull);document.addEventListener('fullscreenchange',fsUI);
+  document.addEventListener('click',()=>{if(fsAuto())goFull()},true);setInterval(fsUI,1500)}
 let deferred=null;const ib=document.getElementById('installBtn');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;ib.hidden=false;if(route==='ajustes')render()});
 addEventListener('appinstalled',()=>{deferred=null;ib.hidden=true;toast('Habitly instalada')});
