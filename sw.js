@@ -1,6 +1,6 @@
 // Habitly service worker: guarda la app para que funcione sin internet
 // y busca siempre la versión más nueva cuando hay conexión.
-const CACHE = 'habitly-v10';
+const CACHE = 'habitly-v11';
 const SHELL = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-512.png'];
 
 self.addEventListener('install', e => {
@@ -30,3 +30,4 @@ self.addEventListener('fetch', e => {
     return r;
   })));
 });
+self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil(clients.matchAll({type:'window'}).then(cs=>{for(const c of cs){if('focus' in c)return c.focus()}return clients.openWindow('./')}))})

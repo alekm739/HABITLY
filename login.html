@@ -1,0 +1,394 @@
+<title>Habitly Acceso</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: una columna centrada (máx 420px). Arriba Chispa sobre el cielo con montañas; abajo la tarjeta de acceso.
+   Mismos tokens que Habitly: modo Cielo (blanco + azul) por defecto, Amanecer y Noche como variantes. */
+:root{
+  color-scheme:light;
+  --accent:#1F6BFF;--accent-ink:#fff;--pc:#5B7CFF;
+  --bg:#F4F7FD;--fg:#0F1B36;--muted:#5D6B8A;--card:#FFFFFF;--soft:rgba(25,45,100,.05);--line:rgba(25,45,100,.12);
+  --shadow:0 18px 50px rgba(25,45,100,.12);--sky1:#DCE8FF;--sky2:#EEF3FF;--ok:#12A57A;--danger:#E5384F;--gold:#E59A00;
+  --mtn:rgba(31,107,255,.09);--mtn2:rgba(255,255,255,.85);
+  --display:"Sora",ui-sans-serif,system-ui,sans-serif;--body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+body[data-mode="amanecer"]{--accent:#FF7A1A;--bg:#FFF7F0;--fg:#2A1608;--muted:#86634A;--soft:rgba(120,60,20,.05);--line:rgba(120,60,20,.13);--sky1:#FFE0C7;--sky2:#FFEFE2;--mtn:rgba(255,122,26,.11);--shadow:0 18px 50px rgba(120,60,20,.12)}
+body[data-mode="noche"]{color-scheme:dark;--accent:#00D4FF;--accent-ink:#00121A;--bg:#070B18;--fg:#ECF1FB;--muted:#93A1C4;--card:#121A31;--soft:rgba(255,255,255,.05);--line:rgba(150,170,230,.18);--sky1:#141B3A;--sky2:#0A0F22;--mtn:rgba(120,140,220,.1);--mtn2:rgba(4,6,16,.75);--shadow:0 18px 50px rgba(0,0,0,.45);--ok:#3DDC97;--danger:#FF6B7D;--gold:#FFC94D}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:500 15px/1.45 var(--body);-webkit-tap-highlight-color:transparent;transition:background .4s,color .4s}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px}
+
+.sky{position:fixed;inset:0;z-index:-2;background:radial-gradient(80% 45% at 70% -5%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%),linear-gradient(180deg,var(--sky1),var(--sky2) 45%,var(--bg))}
+.mtn{position:fixed;left:0;right:0;bottom:0;height:40vh;z-index:-1;pointer-events:none}
+.mtn svg{width:100%;height:100%;display:block}
+.stars{position:fixed;top:0;left:0;width:2px;height:2px;border-radius:50%;z-index:-1;opacity:0}
+body[data-mode="noche"] .stars{opacity:.8}
+
+.wrap{max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-block:14px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.demo{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font:700 11px var(--mono);letter-spacing:.06em;color:var(--muted)}
+.demo .tag{background:color-mix(in srgb,var(--gold) 16%,transparent);color:color-mix(in srgb,var(--gold) 80%,var(--fg));padding:4px 8px;border-radius:999px}
+.demo .modes{display:flex;gap:6px;align-items:center}
+.demo .modes button[data-mode]{width:22px;height:22px;border-radius:50%;border:2px solid var(--card);outline:1.5px solid var(--line)}
+.demo .modes button[data-mode].on{outline:2px solid var(--fg)}
+.demo .inv{white-space:nowrap;margin-left:4px;font:700 11px var(--mono);padding:4px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.demo .inv[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+
+.brand{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;font:800 22px var(--display);letter-spacing:-.02em}
+.brand svg{width:26px;height:26px}
+.hero{position:relative;width:min(200px,52vw);margin:4px auto -26px;z-index:1;cursor:pointer}
+.hero svg{width:100%;height:auto;display:block;overflow:visible}
+.bubble{position:absolute;right:-34%;top:12%;max-width:150px;background:var(--fg);color:var(--bg);font-weight:700;font-size:12.5px;line-height:1.3;padding:7px 10px;border-radius:14px 14px 14px 4px;animation:pop .35s ease}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.95)}}
+
+.av .breathe{animation:breathe 4s ease-in-out infinite;transform-box:view-box;transform-origin:100px 100px}
+.av .bob{animation:bob 3.2s ease-in-out infinite}
+.av .spark{animation:flick 1.6s steps(2) infinite}
+.av #eyes{transition:transform .18s ease-out}
+.av .lid{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
+.av .hand{transform-box:fill-box;transform-origin:center;opacity:0;transform:translate(0px,0px) scale(.3);transition:transform .4s cubic-bezier(.3,1.4,.5,1),opacity .25s ease}
+.av #mouth{transition:d .2s}
+@keyframes breathe{50%{transform:scale(1.06)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes flick{50%{opacity:.3}}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:22px 18px 18px;display:flex;flex-direction:column;gap:14px}
+.card.shake{animation:shake .45s ease}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:14px;padding:4px;gap:4px}
+.tabs button{min-height:40px;border-radius:10px;font-weight:800;font-size:14.5px;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--card);color:var(--fg);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+h1{font:800 23px/1.2 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.lead{margin:-6px 0 0;color:var(--muted);font-size:14px}
+form{display:flex;flex-direction:column;gap:13px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font:700 11.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.inwrap{position:relative;display:flex;align-items:center}
+.inwrap .ico{position:absolute;left:14px;font-size:17px;pointer-events:none;opacity:.7}
+.inp{width:100%;min-height:52px;background:var(--soft);border:1.5px solid var(--line);border-radius:16px;padding:0 46px 0 44px;font-size:16px;font-weight:600;transition:border-color .2s,background .2s}
+.inp:focus{outline:none;border-color:var(--accent);background:color-mix(in srgb,var(--accent) 5%,var(--card))}
+.inp.bad{border-color:var(--danger)}
+.inp.good{border-color:var(--ok)}
+.eye{position:absolute;right:6px;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--muted)}
+.eye svg{width:20px;height:20px}
+.state{position:absolute;right:14px;font-weight:800;font-size:15px}
+.hint{font-size:12.5px;color:var(--muted);min-height:1em;margin:0}
+.hint.err{color:var(--danger);font-weight:700}
+.hint.ok{color:var(--ok);font-weight:700}
+.meter{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.meter i{height:6px;border-radius:9px;background:var(--line);transition:background .25s}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.link{color:var(--accent);font-weight:700;font-size:13.5px}
+.link.glow{animation:glow 1s ease 2}
+@keyframes glow{50%{text-shadow:0 0 12px color-mix(in srgb,var(--accent) 70%,transparent)}}
+.check{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:54px;border-radius:18px;font:800 16px var(--body);background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 35%,transparent);transition:transform .12s,opacity .2s}
+.btn:active{transform:scale(.98)}
+.btn[disabled]{opacity:.6;cursor:wait}
+.btn.ghost{background:none;color:var(--muted);box-shadow:none;min-height:44px;font-size:14.5px}
+.spin{width:18px;height:18px;border-radius:50%;border:2.5px solid currentColor;border-right-color:transparent;animation:rot .7s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.msg{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;font-size:14px;font-weight:600}
+.msg.err{background:color-mix(in srgb,var(--danger) 10%,transparent);color:var(--danger)}
+.msg.ok{background:color-mix(in srgb,var(--ok) 11%,transparent);color:color-mix(in srgb,var(--ok) 80%,var(--fg))}
+.quote{text-align:center;margin:18px auto 0;max-width:34ch;color:var(--muted);font-size:13px}
+.quote b{display:block;font:600 15px/1.35 var(--display);color:var(--fg);margin-bottom:3px;text-wrap:balance}
+.demohelp{text-align:center;font-size:12.5px;color:var(--muted);margin:10px 0 0}
+.demohelp code{font:700 12px var(--mono);background:var(--soft);padding:2px 6px;border-radius:6px;color:var(--fg)}
+
+/* Bienvenida */
+.steps{display:flex;gap:6px;justify-content:center}
+.steps i{width:28px;height:6px;border-radius:9px;background:var(--line);transition:background .3s,width .3s}
+.steps i.on{background:var(--accent);width:40px}
+.paths{display:flex;flex-direction:column;gap:10px}
+.path{--c:var(--accent);display:flex;align-items:center;gap:14px;padding:13px 14px;border-radius:18px;border:1.5px solid var(--line);text-align:left;background:var(--card);transition:border-color .2s,background .2s,transform .12s}
+.path:active{transform:scale(.98)}
+.path .sym{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:23px;background:color-mix(in srgb,var(--c) 15%,transparent);flex:none}
+.path b{font:700 15.5px var(--display);display:block}
+.path small{color:var(--muted);font-size:12.5px}
+.path[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 9%,var(--card))}
+.tpl{display:grid;gap:10px}
+.tpl .path ul{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:4px}
+.tpl .path li{font-size:11.5px;font-weight:700;background:var(--soft);padding:2px 7px;border-radius:7px;color:var(--muted)}
+
+/* Nacimiento */
+.birth{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;color:#ECF1FB;background:radial-gradient(60% 50% at 50% 42%,#281E5A,#04060F);
+  padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.birth .stage{position:relative;width:min(64vw,250px);aspect-ratio:1;display:grid;place-items:center}
+.birth .stage>*{grid-area:1/1}
+.birth .seed{width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 0 30px 10px var(--accent);animation:seed 1.6s ease-in forwards}
+@keyframes seed{0%{transform:scale(.3)}60%{transform:scale(1.4)}85%{transform:scale(.8)}100%{transform:scale(5);opacity:0}}
+.birth .rays{position:absolute;inset:-40%;border-radius:50%;opacity:0;background:repeating-conic-gradient(from 0deg,rgba(255,201,77,.35) 0 8deg,transparent 8deg 16deg);-webkit-mask-image:radial-gradient(circle,#000 18%,transparent 68%);mask-image:radial-gradient(circle,#000 18%,transparent 68%);animation:fadein .8s ease-out 1.5s forwards,rot 18s linear 1.5s infinite}
+.birth .born{opacity:0;width:100%;animation:born .9s cubic-bezier(.2,1.3,.4,1) 1.55s forwards}
+.birth .flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;animation:flash .7s ease-in-out 1.3s both}
+.birth h2{font:800 clamp(26px,7vw,34px) var(--display);margin:0;opacity:0;animation:fadeup .6s ease-out 2.1s forwards;text-wrap:balance}
+.birth p{margin:0;color:#FFC94D;font-weight:700;opacity:0;animation:fadeup .6s ease-out 2.4s forwards}
+.birth .go{width:min(100%,320px);opacity:0;animation:fadeup .6s ease-out 2.7s forwards}
+@keyframes fadein{to{opacity:1}}
+@keyframes born{0%{opacity:0;transform:scale(.2) rotate(-25deg)}60%{opacity:1;transform:scale(1.15) rotate(4deg)}100%{opacity:1;transform:none}}
+@keyframes flash{35%{opacity:1}}
+@keyframes fadeup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);font-weight:800;font-size:14px;padding:10px 18px;border-radius:999px;z-index:50;max-width:calc(100% - 32px);text-align:center;animation:pop .25s ease}
+.fade{animation:fadeup .35s ease}
+@media (prefers-reduced-motion:reduce){*,.av *{animation:none!important;transition:none!important}.birth h2,.birth p,.birth .go,.birth .born{opacity:1}.birth .seed,.birth .flash{display:none}}
+</style>
+
+<div class="sky" aria-hidden="true"></div>
+<div class="stars" id="stars" aria-hidden="true"></div>
+<div class="mtn" aria-hidden="true"><svg viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 200V110l40-28 30 16 52-58 44 46 36-24 46 50 44-62 50 44 58-20v136z" style="fill:var(--mtn)"/><path d="M0 200v-56l60-30 40 24 58-40 50 36 48-26 54 34 46-16 44 18v56z" style="fill:var(--mtn2)"/></svg></div>
+
+<div class="wrap">
+  <div class="demo">
+    <span class="tag">VISTA DE DEMOSTRACIÓN</span>
+    <div class="modes" role="group" aria-label="Tema">
+      <button data-mode="cielo" style="background:#1F6BFF" aria-label="Tema Cielo" class="on"></button>
+      <button data-mode="amanecer" style="background:#FF7A1A" aria-label="Tema Amanecer"></button>
+      <button data-mode="noche" style="background:#0A0F22" aria-label="Tema Noche"></button>
+      <button class="inv" id="invBtn" aria-pressed="false">Código: no</button>
+    </div>
+  </div>
+
+  <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 16a2 2 0 0 1 2 2a4 4 0 0 1-4 4a6 6 0 0 1-6-6a8 8 0 0 1 8-8a10 10 0 0 1 10 10a12 12 0 0 1-12 12" fill="none" style="stroke:var(--accent)" stroke-width="3.2" stroke-linecap="round"/></svg>Habitly</div>
+
+  <div class="hero" id="hero" aria-hidden="true"><div class="bubble" id="say">¡Hola! ¿Entramos?</div><div id="avHost"></div></div>
+  <main class="card" id="card" aria-live="polite"></main>
+  <div class="quote" id="quote"></div>
+  <p class="demohelp" id="demohelp">Prueba con <code>alex</code> y <code>habitly123</code>, o crea una cuenta.</p>
+</div>
+<div id="ovHost"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const reduce=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
+
+/* ---------- Cuentas de demostración (después las maneja Firebase) ---------- */
+const DEMO=[{nick:'alex',email:'alekm739@gmail.com',pass:'habitly123',name:'Alex'}];
+const RESERVED=['admin','habitly','chispa','soporte','root'];
+let INVITE=false;const INVITE_CODE='HABITLY-2026';
+
+const PATHS={
+  inventor:{n:'Inventor',m:'Tesla',e:'⚡',c:'#8B5CF6',d:'Aprender, crear, construir'},
+  explorador:{n:'Explorador',m:'Musk',e:'🚀',c:'#F26B2A',d:'Trabajo, negocio, metas grandes'},
+  despierto:{n:'Despierto',m:'Buda',e:'🪷',c:'#E0A400',d:'Mente, cuerpo, conciencia'}
+};
+const QUOTES=[
+  ['Enfocarse es decir que no a cien buenas ideas.','Inspirado en Steve Jobs'],
+  ['Piensa desde primeros principios.','Inspirado en Elon Musk'],
+  ['Imagina el diseño completo antes de tocar una herramienta.','Inspirado en Nikola Tesla'],
+  ['Un paso a la vez, con atención completa en el que estás dando.','Inspirado en Buda'],
+  ['Lo que estorba el camino se vuelve el camino.','Inspirado en Marco Aurelio'],
+  ['No es que tengamos poco tiempo, es que perdemos mucho.','Inspirado en Séneca']
+];
+
+/* ---------- Avatar Chispa con ojos y manitas ---------- */
+const MOUTH={ok:'M93 112 q7 6 14 0',joy:'M90 110 q10 11 20 0',sad:'M93 116 q7 -5 14 0',wow:'M97 112 q3 -4 6 0 q3 5 -3 5 q-6 0 -3 -5'};
+function avatarSVG(){
+  return`<svg viewBox="0 0 200 200" class="av" role="img" aria-label="Chispa, tu avatar">
+  <defs><radialGradient id="ac" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".38" style="stop-color:#00C2F0"/><stop offset="1" id="acEnd" style="stop-color:var(--pc)"/></radialGradient>
+  <radialGradient id="ap" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#BDEFFF"/></radialGradient>
+  <radialGradient id="ah"><stop offset="0" style="stop-color:#00C2F0" stop-opacity=".45"/><stop offset=".6" style="stop-color:var(--pc)" stop-opacity=".13"/><stop offset="1" style="stop-color:var(--pc)" stop-opacity="0"/></radialGradient></defs>
+  <circle cx="100" cy="100" r="86" fill="url(#ah)" class="breathe"/>
+  <circle class="spark" cx="40" cy="70" r="2.6" fill="#00C2F0"/><circle class="spark" cx="164" cy="60" r="2" fill="#00C2F0" style="animation-delay:.4s"/><circle class="spark" cx="156" cy="146" r="2.4" fill="#00C2F0" style="animation-delay:.8s"/>
+  <g class="bob">
+    <circle cx="100" cy="100" r="48" fill="url(#ac)"/>
+    <ellipse cx="83" cy="78" rx="13" ry="7.5" fill="#fff" opacity=".55" transform="rotate(-30 83 78)"/>
+    <g id="eyes"><g class="lid"><rect x="78" y="88" width="11" height="17" rx="5.5" fill="#0B1020"/><rect x="111" y="88" width="11" height="17" rx="5.5" fill="#0B1020"/></g>
+      <circle cx="86" cy="92" r="2.2" fill="#fff"/><circle cx="119" cy="92" r="2.2" fill="#fff"/></g>
+    <ellipse cx="73" cy="108" rx="6" ry="3.4" fill="#FF7AA8" opacity=".45"/><ellipse cx="127" cy="108" rx="6" ry="3.4" fill="#FF7AA8" opacity=".45"/>
+    <path id="mouth" d="${MOUTH.ok}" stroke="#0B1020" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <g class="hand" id="hl"><ellipse cx="52" cy="108" rx="15" ry="13" fill="url(#ap)" stroke="#00C2F0" stroke-opacity=".55" stroke-width="2"/><path d="M45 100 q2 -4 4 0 M50 98 q2 -4 4 0 M55 100 q2 -4 4 0" stroke="#00C2F0" stroke-opacity=".6" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>
+    <g class="hand" id="hr"><ellipse cx="148" cy="108" rx="15" ry="13" fill="url(#ap)" stroke="#00C2F0" stroke-opacity=".55" stroke-width="2"/><path d="M141 100 q2 -4 4 0 M146 98 q2 -4 4 0 M151 100 q2 -4 4 0" stroke="#00C2F0" stroke-opacity=".6" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>
+  </g></svg>`;
+}
+$('avHost').innerHTML=avatarSVG();
+const eyes=()=>$('eyes'),mouth=()=>$('mouth');
+let covering=false,peek=false;
+function look(dx,dy){if(covering)return;eyes().style.transform=`translate(${dx}px,${dy}px)`}
+function setMouth(k){mouth().setAttribute('d',MOUTH[k]||MOUTH.ok)}
+function cover(on,pk){covering=on;peek=!!pk;
+  const L=$('hl'),Rh=$('hr');L.style.opacity=Rh.style.opacity=on?'1':'';
+  L.style.transform=on?`translate(31px,${pk?6:-12}px) scale(1)`:'';
+  Rh.style.transform=on?'translate(-32px,-12px) scale(1)':'';
+  if(on)eyes().style.transform='translate(0px,2px)';}
+let sayT;function say(t,ms=2600){const b=$('say');b.textContent=t;b.hidden=false;b.style.animation='none';b.offsetHeight;b.style.animation='';clearTimeout(sayT);if(ms)sayT=setTimeout(()=>b.hidden=true,ms)}
+addEventListener('pointermove',e=>{if(document.activeElement&&document.activeElement.tagName==='INPUT')return;const r=$('hero').getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const dx=Math.max(-6,Math.min(6,(e.clientX-cx)/40)),dy=Math.max(-5,Math.min(6,(e.clientY-cy)/40));look(dx,dy)});
+$('hero').addEventListener('click',()=>{const h=$('hero').querySelector('svg');h.animate([{transform:'scale(1)'},{transform:'scale(1.1) rotate(-4deg)'},{transform:'scale(1)'}],{duration:450,easing:'ease-out'});
+  setMouth('joy');say(['¡Jeje! ⚡','Aquí te espero 🪷','¿Listo para avanzar? 🚀'][Math.floor(Math.random()*3)]);setTimeout(()=>setMouth('ok'),900);burst(innerWidth/2,$('hero').getBoundingClientRect().top+90,10)});
+
+/* ---------- Efectos ---------- */
+const cv=$('fx'),cx=cv.getContext('2d');let P=[],raf=0;
+function fit(){const r=devicePixelRatio||1;cv.width=innerWidth*r;cv.height=innerHeight*r;cx.setTransform(r,0,0,r,0,0)}fit();addEventListener('resize',fit);
+function loop(){cx.clearRect(0,0,innerWidth,innerHeight);P=P.filter(p=>p.l>0);for(const p of P){p.l--;p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.globalAlpha=Math.min(1,p.l/25);cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;if(p.d){cx.beginPath();cx.arc(0,0,p.s/2,0,7);cx.fill()}else cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);cx.restore()}if(P.length)raf=requestAnimationFrame(loop);else{raf=0;cx.clearRect(0,0,innerWidth,innerHeight)}}
+const cols=()=>[getComputedStyle(document.body).getPropertyValue('--accent').trim(),'#FFC94D','#8B5CF6','#F26B2A','#00C2F0','#3DDC97'];
+function burst(x,y,n=16){if(reduce())return;const c=cols();for(let i=0;i<n;i++){const a=Math.random()*6.28,v=2+Math.random()*4;P.push({d:1,x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1.5,g:.12,s:3+Math.random()*4,c:c[i%c.length],l:40+Math.random()*20,r:0,vr:0})}if(!raf)raf=requestAnimationFrame(loop)}
+function confetti(n=140){if(reduce())return;const c=cols();for(let i=0;i<n;i++)P.push({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.4,vx:(Math.random()-.5)*3,vy:2+Math.random()*3,g:.05,s:6+Math.random()*6,c:c[i%c.length],l:160+Math.random()*80,r:Math.random()*6,vr:(Math.random()-.5)*.3});if(!raf)raf=requestAnimationFrame(loop)}
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2600)}
+function shake(){const c=$('card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');try{navigator.vibrate&&navigator.vibrate([30,40,30])}catch(e){}}
+
+/* ---------- Íconos ---------- */
+const EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYEOFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7c1.8 0 3.4-.5 4.8-1.3"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+
+/* ---------- Validaciones ---------- */
+const NICK_RE=/^[a-z0-9_.]{3,20}$/;
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function strength(p){let s=0;if(p.length>=8)s++;if(p.length>=12)s++;if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;if(/\d/.test(p))s++;if(/[^A-Za-z0-9]/.test(p))s++;return Math.min(4,Math.max(p?1:0,s-(p.length<8?1:0)))}
+const STR=[['',''],['Muy débil','var(--danger)'],['Chispa · débil','#F5B547'],['Reactor · buena','#3DBE8B'],['Cosmos · excelente','var(--ok)']];
+function nickTaken(n){return RESERVED.includes(n)||DEMO.some(a=>a.nick===n)}
+function findAccount(id){id=id.trim().toLowerCase();return DEMO.find(a=>a.nick===id||a.email.toLowerCase()===id)}
+function maskEmail(e){const[u,d]=e.split('@');return u.slice(0,2)+'•'.repeat(Math.max(2,u.length-2))+'@'+d}
+
+/* ---------- Vistas ---------- */
+let view='login',fails=0,reg={};
+function render(){
+  const c=$('card');c.classList.add('fade');setTimeout(()=>c.classList.remove('fade'),400);
+  $('demohelp').hidden=view!=='login';
+  if(view==='login'||view==='signup'){
+    c.innerHTML=`<div class="tabs" role="tablist"><button role="tab" aria-selected="${view==='login'}" data-go="login">Entrar</button><button role="tab" aria-selected="${view==='signup'}" data-go="signup">Crear cuenta</button></div>
+    ${view==='login'?loginHTML():signupHTML()}`;
+  }else if(view==='forgot')c.innerHTML=forgotHTML();
+  else if(view.startsWith('ob'))c.innerHTML=onboardHTML();
+  bind();
+}
+function pw(id,label,auto){return`<div class="field"><label for="${id}">${label}</label><div class="inwrap"><span class="ico">🔒</span><input class="inp" id="${id}" type="password" autocomplete="${auto}" required><button type="button" class="eye" data-eye="${id}" aria-label="Mostrar contraseña">${EYE}</button></div></div>`}
+function loginHTML(){return`<div><h1>Qué gusto verte de nuevo</h1></div><p class="lead">Entra para seguir subiendo de nivel.</p>
+  <form id="fLogin" novalidate>
+    <div class="field"><label for="lId">Correo o nickname</label><div class="inwrap"><span class="ico">👤</span><input class="inp" id="lId" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="tu_nick o tu@correo.com" required></div></div>
+    ${pw('lPw','Contraseña','current-password')}
+    <div class="row"><label class="check"><input type="checkbox" id="lKeep" checked> Mantener sesión</label><button type="button" class="link${fails>=2?' glow':''}" data-go="forgot">¿Olvidaste tu contraseña?</button></div>
+    <div id="lMsg"></div>
+    <button class="btn" type="submit" id="lBtn">Entrar</button>
+  </form>`}
+function signupHTML(){return`<div><h1>Crea tu cuenta</h1></div><p class="lead">Tu Chispa nace en cuanto termines.</p>
+  <form id="fSign" novalidate>
+    <div class="field"><label for="sNick">Nickname</label><div class="inwrap"><span class="ico">✨</span><input class="inp" id="sNick" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" placeholder="ej. alex_m" required><span class="state" id="sNickSt"></span></div><p class="hint" id="sNickH">3 a 20 caracteres: letras, números, punto o guion bajo.</p></div>
+    <div class="field"><label for="sMail">Correo</label><div class="inwrap"><span class="ico">✉️</span><input class="inp" id="sMail" type="email" inputmode="email" autocomplete="email" autocapitalize="none" placeholder="tu@correo.com" required></div><p class="hint" id="sMailH">Lo usamos para recuperar tu contraseña.</p></div>
+    ${pw('sPw','Contraseña','new-password')}
+    <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i></div><p class="hint" id="sPwH">Mínimo 8 caracteres.</p>
+    ${INVITE?`<div class="field"><label for="sInv">Código de invitación</label><div class="inwrap"><span class="ico">🎟️</span><input class="inp" id="sInv" autocapitalize="characters" spellcheck="false" placeholder="HABITLY-XXXX" required></div><p class="hint" id="sInvH">Pídelo a quien te invitó. En la demo es ${INVITE_CODE}.</p></div>`:''}
+    <div id="sMsg"></div>
+    <button class="btn" type="submit" id="sBtn">Crear cuenta</button>
+  </form>`}
+function forgotHTML(){return`<button class="link" data-go="login" style="align-self:flex-start">← Volver</button><div><h1>Recupera tu acceso</h1></div><p class="lead">Escribe tu correo o nickname y te mandamos un enlace para crear una contraseña nueva.</p>
+  <form id="fForgot" novalidate><div class="field"><label for="fId">Correo o nickname</label><div class="inwrap"><span class="ico">👤</span><input class="inp" id="fId" autocapitalize="none" spellcheck="false" required></div></div>
+  <div id="fMsg"></div><button class="btn" type="submit" id="fBtn">Enviar enlace</button></form>`}
+function onboardHTML(){
+  const st=+view.slice(2);const dots=`<div class="steps" aria-label="Paso ${st} de 3">${[1,2,3].map(i=>`<i class="${i<=st?'on':''}"></i>`).join('')}</div>`;
+  if(st===1)return`${dots}<div><h1>¿Cómo quieres que te llame Chispa?</h1></div><p class="lead">Así te saludará cada día.</p>
+    <form id="fOb1" novalidate><div class="field"><label for="oName">Tu nombre</label><div class="inwrap"><span class="ico">👋</span><input class="inp" id="oName" maxlength="24" value="${esc(reg.name||'')}" required></div></div><button class="btn" type="submit">Continuar</button></form>`;
+  if(st===2)return`${dots}<div><h1>Elige tu camino principal</h1></div><p class="lead">Le da forma y color a tu Chispa. Después puedes avanzar en los tres.</p>
+    <div class="paths">${Object.entries(PATHS).map(([k,p])=>`<button class="path" style="--c:${p.c}" data-path="${k}" aria-pressed="${reg.path===k}"><span class="sym">${p.e}</span><span><b>${p.n} · ${p.m}</b><small>${p.d}</small></span></button>`).join('')}</div>
+    <button class="btn" data-next="3" ${reg.path?'':'disabled style="opacity:.45;cursor:not-allowed"'}>Continuar</button><button class="btn ghost" data-go="ob1">← Atrás</button>`;
+  return`${dots}<div><h1>¿Cómo quieres empezar?</h1></div><p class="lead">Puedes cambiar todo después.</p>
+    <div class="tpl"><button class="path" data-tpl="ejemplo" aria-pressed="${reg.tpl==='ejemplo'}"><span class="sym">🧬</span><span><b>Plantilla de ejemplo</b><small>Hábitos y bloques comunes para arrancar</small><ul><li>Meditar</li><li>Ejercicio</li><li>Leer 20 min</li><li>Tomar agua</li><li>Planear el día</li></ul></span></button>
+    <button class="path" data-tpl="cero" aria-pressed="${reg.tpl==='cero'}"><span class="sym">🌱</span><span><b>Empezar desde cero</b><small>Tú creas tus propios hábitos y tareas</small></span></button></div>
+    <button class="btn" data-born="1" ${reg.tpl?'':'disabled style="opacity:.45;cursor:not-allowed"'}>Hacer nacer a mi Chispa ✨</button><button class="btn ghost" data-go="ob2">← Atrás</button>`;
+}
+
+function bind(){
+  const c=$('card');
+  c.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{view=b.dataset.go;if(view==='login'||view==='signup'){cover(false);setMouth('ok')}render();focusFirst()});
+  c.querySelectorAll('[data-eye]').forEach(b=>b.onclick=()=>{const i=$(b.dataset.eye),show=i.type==='password';i.type=show?'text':'password';b.innerHTML=show?EYEOFF:EYE;b.setAttribute('aria-label',show?'Ocultar contraseña':'Mostrar contraseña');if(document.activeElement===i||covering)cover(true,show);say(show?'Solo un poquito… 👀':'No veo nada 🙈',1500);i.focus()});
+  c.querySelectorAll('input').forEach(i=>{
+    if(i.type==='password'||i.dataset.eye!==undefined){}
+    i.addEventListener('focus',()=>{if(i.id==='lPw'||i.id==='sPw'){cover(true,i.type==='text');setMouth('ok')}else{cover(false);trackText(i)}});
+    i.addEventListener('blur',()=>{setTimeout(()=>{const a=document.activeElement;if(!a||!(a.id==='lPw'||a.id==='sPw'||a.dataset.eye))cover(false);if(!a||a.tagName!=='INPUT')look(0,0)},10)});
+    i.addEventListener('input',()=>{if(i.id!=='lPw'&&i.id!=='sPw')trackText(i);i.classList.remove('bad')});
+  });
+  const fl=$('fLogin');if(fl)fl.onsubmit=doLogin;
+  const fs=$('fSign');if(fs){fs.onsubmit=doSignup;$('sNick').addEventListener('input',checkNick);$('sPw').addEventListener('input',checkPw);$('sMail').addEventListener('blur',checkMail)}
+  const ff=$('fForgot');if(ff)ff.onsubmit=doForgot;
+  const o1=$('fOb1');if(o1)o1.onsubmit=e=>{e.preventDefault();const v=$('oName').value.trim();if(!v){$('oName').classList.add('bad');shake();return}reg.name=v;view='ob2';render();say(`¡Mucho gusto, ${v}! 😄`)};
+  c.querySelectorAll('[data-path]').forEach(b=>b.onclick=()=>{reg.path=b.dataset.path;document.documentElement.style.setProperty('--pc',PATHS[reg.path].c);setMouth('joy');say(`${PATHS[reg.path].e} ¡Camino del ${PATHS[reg.path].n}!`);burst(innerWidth/2,$('hero').getBoundingClientRect().top+90,12);render();setTimeout(()=>setMouth('ok'),900)});
+  c.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>{if(!reg.path)return;view='ob'+b.dataset.next;render()});
+  c.querySelectorAll('[data-tpl]').forEach(b=>b.onclick=()=>{reg.tpl=b.dataset.tpl;render()});
+  c.querySelectorAll('[data-born]').forEach(b=>b.onclick=()=>{if(reg.tpl)birth()});
+}
+function focusFirst(){const i=$('card').querySelector('input');if(i&&matchMedia('(pointer:fine)').matches)setTimeout(()=>i.focus(),60)}
+function trackText(i){const r=Math.min(1,i.value.length/26);look(-6+12*r,5)}
+
+/* ---------- Acciones ---------- */
+function busy(btn,on,txt){btn.disabled=on;btn.innerHTML=on?`<span class="spin"></span>${txt}`:txt}
+async function doLogin(e){
+  e.preventDefault();const id=$('lId'),pw=$('lPw'),msg=$('lMsg'),btn=$('lBtn');msg.innerHTML='';
+  if(!id.value.trim()){id.classList.add('bad');id.focus();shake();return}
+  if(!pw.value){pw.classList.add('bad');pw.focus();shake();return}
+  busy(btn,true,'Entrando…');await wait(700);
+  const acc=findAccount(id.value);
+  if(!acc||acc.pass!==pw.value){busy(btn,false,'Entrar');fails++;shake();cover(false);setMouth('sad');say('Mmm… algo no coincide 😕');
+    msg.innerHTML=`<div class="msg err">⚠️ <span>El ${id.value.includes('@')?'correo':'nickname'} o la contraseña no coinciden. Revisa mayúsculas y vuelve a intentar.</span></div>`;
+    if(fails>=2){const l=$('card').querySelector('[data-go="forgot"]');l&&l.classList.add('glow')}
+    pw.value='';pw.focus();return}
+  fails=0;cover(false);setMouth('joy');say(`¡Bienvenido, ${acc.name}! ✨`,0);confetti(90);try{navigator.vibrate&&navigator.vibrate([20,30,60])}catch(err){}
+  busy(btn,false,'¡Listo!');
+  $('card').innerHTML=`<div style="text-align:center;display:flex;flex-direction:column;gap:12px"><h1>¡Hola de nuevo, ${esc(acc.name)}!</h1><p class="lead" style="margin:0">Tu progreso ya está cargado en este dispositivo.</p><div class="msg ok">☁️ <span>Sesión iniciada como <b>@${esc(acc.nick)}</b></span></div><button class="btn" id="enter">Entrar a Habitly</button><button class="btn ghost" id="out">Volver a la pantalla de acceso</button></div>`;
+  $('enter').onclick=()=>toast('En la app real, aquí entras a tu Inicio');
+  $('out').onclick=()=>{view='login';$('say').hidden=true;setMouth('ok');render()};
+}
+let nickT;
+function checkNick(){
+  const i=$('sNick'),h=$('sNickH'),st=$('sNickSt');i.value=i.value.toLowerCase().replace(/\s/g,'');const v=i.value;clearTimeout(nickT);
+  i.classList.remove('good','bad');h.className='hint';st.textContent='';
+  if(!v){h.textContent='3 a 20 caracteres: letras, números, punto o guion bajo.';return}
+  if(!NICK_RE.test(v)){h.className='hint err';h.textContent=v.length<3?'Muy corto, mínimo 3 caracteres.':'Solo letras, números, punto o guion bajo.';i.classList.add('bad');return}
+  st.innerHTML='<span class="spin" style="width:14px;height:14px;color:var(--muted)"></span>';
+  nickT=setTimeout(()=>{if(nickTaken(v)){st.textContent='✗';st.style.color='var(--danger)';h.className='hint err';h.textContent=`@${v} ya está ocupado. Prueba ${v}_${Math.floor(Math.random()*90+10)}.`;i.classList.add('bad')}
+    else{st.textContent='✓';st.style.color='var(--ok)';h.className='hint ok';h.textContent=`@${v} está disponible`;i.classList.add('good')}},450);
+}
+function checkMail(){const i=$('sMail'),h=$('sMailH');if(!i.value)return;const ok=EMAIL_RE.test(i.value.trim());const used=DEMO.some(a=>a.email.toLowerCase()===i.value.trim().toLowerCase());
+  i.classList.toggle('bad',!ok||used);i.classList.toggle('good',ok&&!used);h.className='hint'+(ok&&!used?'':' err');h.textContent=!ok?'Ese correo no parece válido.':used?'Ya hay una cuenta con ese correo. ¿Quieres entrar?':'Lo usamos para recuperar tu contraseña.'}
+function checkPw(){const v=$('sPw').value,s=strength(v);$('card').querySelectorAll('.meter i').forEach((m,k)=>m.style.background=k<s?STR[s][1]:'');const h=$('sPwH');
+  h.className='hint';h.textContent=v?(v.length<8?`Faltan ${8-v.length} caracteres`:STR[s][0]):'Mínimo 8 caracteres.';if(v&&v.length<8)h.className='hint err'}
+async function doSignup(e){
+  e.preventDefault();const n=$('sNick'),m=$('sMail'),p=$('sPw'),inv=$('sInv'),msg=$('sMsg'),btn=$('sBtn');msg.innerHTML='';
+  const errs=[];const nv=n.value.trim().toLowerCase();
+  if(!NICK_RE.test(nv)||nickTaken(nv)){errs.push(n);n.classList.add('bad')}
+  if(!EMAIL_RE.test(m.value.trim())||DEMO.some(a=>a.email.toLowerCase()===m.value.trim().toLowerCase())){errs.push(m);m.classList.add('bad');checkMail()}
+  if(p.value.length<8){errs.push(p);p.classList.add('bad');checkPw()}
+  if(inv&&inv.value.trim().toUpperCase()!==INVITE_CODE){errs.push(inv);inv.classList.add('bad');$('sInvH').className='hint err';$('sInvH').textContent='Ese código no es válido.'}
+  if(errs.length){shake();setMouth('sad');say('Revisemos lo marcado en rojo 🔍');errs[0].focus();msg.innerHTML=`<div class="msg err">⚠️ <span>Corrige ${errs.length===1?'el campo marcado':'los '+errs.length+' campos marcados'} para continuar.</span></div>`;return}
+  busy(btn,true,'Creando tu cuenta…');await wait(900);
+  DEMO.push({nick:nv,email:m.value.trim(),pass:p.value,name:nv.charAt(0).toUpperCase()+nv.slice(1)});
+  reg={nick:nv,name:nv.replace(/[_.]/g,' ').replace(/\b\w/,c=>c.toUpperCase())};cover(false);setMouth('joy');say('¡Cuenta creada! Ahora conozcámonos 😄');
+  view='ob1';render();focusFirst();
+}
+async function doForgot(e){
+  e.preventDefault();const i=$('fId'),msg=$('fMsg'),btn=$('fBtn');if(!i.value.trim()){i.classList.add('bad');shake();return}
+  busy(btn,true,'Enviando…');await wait(800);const acc=findAccount(i.value);busy(btn,false,'Enviar enlace');
+  msg.innerHTML=`<div class="msg ok">📬 <span>Si existe una cuenta con ese dato, te llegará un enlace${acc?` a <b>${esc(maskEmail(acc.email))}</b>`:''}. Revisa también tu carpeta de spam.</span></div>`;
+  setMouth('joy');say('¡Enviado! Revisa tu correo 📬');
+}
+function birth(){
+  const p=PATHS[reg.path];
+  $('ovHost').innerHTML=`<div class="birth" role="dialog" aria-modal="true"><div class="stage"><div class="rays"></div><div class="seed"></div><div class="born">${avatarSVG().replace(/id="(ac|ah|ap|acEnd|eyes|mouth|hl|hr)"/g,'id="b$1"').replace(/url\(#a(c|h|p)\)/g,'url(#ba$1)').replace(MOUTH.ok,MOUTH.joy)}</div></div><div class="flash"></div>
+    <h2>¡Nació tu Chispa, ${esc(reg.name)}!</h2><p>${p.e} Camino del ${p.n} · Nivel 1${reg.tpl==='ejemplo'?' · 5 hábitos listos':''}</p>
+    <div class="go"><button class="btn" id="bGo">Entrar a Habitly</button></div></div>`;
+  try{navigator.vibrate&&navigator.vibrate([40,60,40,60,160])}catch(e){}
+  setTimeout(()=>confetti(170),1600);
+  $('bGo').onclick=()=>{$('ovHost').innerHTML='';toast('En la app real, aquí entras a tu Inicio');view='login';reg={};document.documentElement.style.removeProperty('--pc');setMouth('ok');$('say').hidden=true;render()};
+}
+
+/* ---------- Controles de la demo ---------- */
+document.querySelectorAll('.modes [data-mode]').forEach(b=>b.onclick=()=>{document.body.dataset.mode=b.dataset.mode;document.querySelectorAll('.modes [data-mode]').forEach(x=>x.classList.toggle('on',x===b))});
+$('invBtn').onclick=()=>{INVITE=!INVITE;$('invBtn').setAttribute('aria-pressed',INVITE);$('invBtn').textContent='Código: '+(INVITE?'sí':'no');if(view==='signup')render();toast(INVITE?'Registro con código de invitación':'Registro abierto')};
+(()=>{const q=QUOTES[Math.floor(Math.random()*QUOTES.length)];$('quote').innerHTML=`<b>${esc(q[0])}</b>${esc(q[1])}`;
+  const sh=[];for(let i=0;i<80;i++)sh.push(`${(Math.random()*100).toFixed(1)}vw ${(Math.random()*60).toFixed(1)}vh 0 ${Math.random()<.15?'1px':'0'} rgba(255,255,255,${(.3+Math.random()*.7).toFixed(2)})`);$('stars').style.boxShadow=sh.join(',')})();
+setTimeout(()=>$('say').hidden=true,3200);
+render();
+})();
+</script>
