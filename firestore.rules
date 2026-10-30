@@ -6,6 +6,9 @@ service cloud.firestore {
       match /days/{day} {
         allow read, write: if request.auth != null && request.auth.uid == uid;
       }
+      match /notes/{note} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
     }
     match /nicks/{nick} {
       allow get: if true;

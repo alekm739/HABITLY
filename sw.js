@@ -1,6 +1,6 @@
 // Habitly service worker: guarda la app para que funcione sin internet
 // y busca siempre la versión más nueva cuando hay conexión.
-const CACHE = 'habitly-v8';
+const CACHE = 'habitly-v10';
 const SHELL = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-512.png'];
 
 self.addEventListener('install', e => {

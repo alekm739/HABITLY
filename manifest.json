@@ -11,20 +11,98 @@
   "orientation": "portrait",
   "background_color": "#F4F7FD",
   "theme_color": "#F4F7FD",
-  "categories": ["productivity", "lifestyle", "health"],
+  "categories": [
+    "productivity",
+    "lifestyle",
+    "health"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "screenshots": [
-    { "src": "screenshots/inicio.jpg", "sizes": "780x1688", "type": "image/jpeg", "form_factor": "narrow", "label": "Tu avatar Chispa y tu progreso del día" },
-    { "src": "screenshots/focus.jpg", "sizes": "780x1688", "type": "image/jpeg", "form_factor": "narrow", "label": "Focus: tus bloques de trabajo del día" },
-    { "src": "screenshots/logros.jpg", "sizes": "780x1688", "type": "image/jpeg", "form_factor": "narrow", "label": "Ruta de niveles, mentores y medallas" }
+    {
+      "src": "screenshots/inicio.jpg",
+      "sizes": "780x1688",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Tu avatar Chispa y tu progreso del día"
+    },
+    {
+      "src": "screenshots/focus.jpg",
+      "sizes": "780x1688",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Focus: tus bloques de trabajo del día"
+    },
+    {
+      "src": "screenshots/logros.jpg",
+      "sizes": "780x1688",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Ruta de niveles, mentores y medallas"
+    }
   ],
   "shortcuts": [
-    { "name": "Hábitos de hoy", "short_name": "Hábitos", "url": "./#habitos", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Focus del día", "short_name": "Focus", "url": "./#focus", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Check-in de ánimo", "short_name": "Ánimo", "url": "./#animo", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+    {
+      "name": "Agregar rápido",
+      "short_name": "Agregar",
+      "url": "./#agregar",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Nueva nota",
+      "short_name": "Nota",
+      "url": "./#nota",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Agenda de hoy",
+      "short_name": "Agenda",
+      "url": "./#agenda",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Hábitos de hoy",
+      "short_name": "Hábitos",
+      "url": "./#habitos",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }
